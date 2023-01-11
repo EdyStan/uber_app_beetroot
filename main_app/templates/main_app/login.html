@@ -12,14 +12,14 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            background: #7abecc !important;
+            background-image: linear-gradient(to bottom right, black, #343a40, slateblue);
         }
 
         .user_card {
             width: 350px;
             margin-top: auto;
             margin-bottom: auto;
-            background: #74cfbf;
+            background: #343a40;
             position: relative;
             display: flex;
             justify-content: center;
@@ -43,7 +43,7 @@
 
         .login_btn {
             width: 100%;
-            background: #33ccff !important;
+            background: slateblue !important;
             color: white !important;
         }
 
@@ -57,7 +57,7 @@
         }
 
         .input-group-text {
-            background: #f7ba5b !important;
+            background: slateblue !important;
             color: white !important;
             border: 0 !important;
             border-radius: 0.25rem 0 0 0.25rem !important;
@@ -74,6 +74,10 @@
             color: #fff;
             padding: 10px;
             margin-top: 10px;
+        }
+
+        .question {
+            color: white;
         }
     </style>
 {% endblock %}
@@ -118,7 +122,8 @@
 
                 <div class="mt-4">
                     <div class="d-flex justify-content-center links">
-                        Don't have an account? <a href="{% url 'register' %}" class="ml-2">Sign Up</a>
+                        <p class="question"> Don't have an account?</p> <br />
+                        <p><a href="{% url 'register' %}" class="ml-2" style="align-self: center"> Sign Up</a></p>
                     </div>
 
                 </div>
