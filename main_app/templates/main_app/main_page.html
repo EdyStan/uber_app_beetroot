@@ -1,9 +1,51 @@
 {% extends 'main_app/base.html' %}
 {% load bootstrap5 %}
 
+{% block head %}
+    <style>
+        .carousel-item {
+
+        }
+
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        .carousel-image {
+            {#height: 100%;#}
+            {#background-repeat: no-repeat;#}
+            {#background-size: cover;#}
+            {#background-position: center;#}
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .b-example-divider {
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
+
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
     <main>
-
         <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"
@@ -13,42 +55,19 @@
             </div>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <div class="d-flex justify-content-center" style="background-color: #343a40">
-                        {% load static %}
-                        <img src="{% static "/media/carousel_3.jpg" %}" alt="carousel_1" class="center-block"
-                             width="100%" height="100%"/>
-                    </div>
-
-                    {#        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>#}
-                    <div class="container">
-                        {#          <div class="carousel-caption text-start">#}
-                        {#            <p><a class="btn btn-lg btn-light" href="#">Sign up today</a></p>#}
-                        {#          </div>#}
-                    </div>
+                    {% load static %}
+                    <img src="{% static "/media/carousel_3.jpg" %}" class="carousel-image bd-placeholder-img-lg"
+                         alt="carousel_1" aria-hidden="true"/>
                 </div>
                 <div class="carousel-item">
-                    <div class="d-flex justify-content-center" style="background-color: #343a40">
-                        {% load static %}
-                        <img src="{% static "/media/carousel_2.jpg" %}" alt="carousel_2" class="center-block"
-                             width="100%" height="100%"/>
-                    </div>
-
-                    {#        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>#}
-                    <div class="container">
-                        <div class="carousel-caption">
-                        </div>
-                    </div>
+                    {% load static %}
+                    <img src="{% static "/media/carousel_2.jpg" %}" class="carousel-image bd-placeholder-img-lg"
+                         alt="carousel_2" aria-hidden="true"/>
                 </div>
                 <div class="carousel-item">
-                    <div class="d-flex justify-content-center" style="background-color: #343a40">
-                        {% load static %}
-                        <img src="{% static "/media/carousel_1.jpg" %}" alt="carousel_3" class="center-block"
-                             width="100%" height="100%"/>
-                    </div>
-
-                    {#        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>#}
-                    <div class="container">
-                    </div>
+                    {% load static %}
+                    <img src="{% static "/media/carousel_1.jpg" %}" class="carousel-image bd-placeholder-img-lg"
+                         alt="carousel_3" aria-hidden="true"/>
                 </div>
             </div>
         </div>
