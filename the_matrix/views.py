@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def home_page(request):
     return render(request, 'main_app/main_page.html', {})
 
