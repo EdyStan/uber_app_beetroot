@@ -11,6 +11,14 @@ def home_page(request):
     return render(request, 'main_app/main_page.html', {})
 
 
+def driver_page(request):
+    return render(request, 'main_app/driver_page.html')
+
+
+def passenger_page(request):
+    return render(request, 'main_app/passenger_page.html')
+
+
 def register_page(request):
     # if request.user.is_authenticated:
     #     return redirect('home')
