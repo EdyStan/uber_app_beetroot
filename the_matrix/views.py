@@ -32,7 +32,8 @@ def login_page(request):
     if request.method == 'POST':
         email = request.POST.get('email')  # Get email value from form
         password = request.POST.get('password')  # Get password value from form
-        user = authenticate(request, email=email, password=password)
+        role = request.POST.get('role')
+        user = authenticate(request, email=email, role=role, password=password)
 
         if user is not None:
             login(request, user)
@@ -53,19 +54,21 @@ def logout_user(request):
     return redirect('login')
 
 
+@login_required(login_url='login')
 def passenger_page(request):
-    if request.user.is_authenticated and user_type.objects.get(user=request.user).is_passenger:
+    if user_type.objects.get(user=request.user).is_passenger:
         return render(request, 'main_app/passenger_page.html')
-    elif request.user.is_authenticated and user_type.objects.get(user=request.user).is_driver:
+    elif user_type.objects.get(user=request.user).is_driver:
         return redirect('driver_menu')
     else:
         return redirect('home')
 
 
+@login_required(login_url='login')
 def driver_page(request):
-    if request.user.is_authenticated and user_type.objects.get(user=request.user).is_driver:
+    if user_type.objects.get(user=request.user).is_driver:
         return render(request, 'main_app/driver_page.html')
-    elif request.user.is_authenticated and user_type.objects.get(user=request.user).is_student:
+    elif user_type.objects.get(user=request.user).is_passenger:
         return redirect('passenger_menu')
     else:
         return redirect('home')

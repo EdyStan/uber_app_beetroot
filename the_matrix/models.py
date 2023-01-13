@@ -33,6 +33,17 @@ class UserManager(BaseUserManager):
 
 
 class AppUser(AbstractBaseUser, PermissionsMixin):
+
+    ROLE_CHOICES = (
+        ('passenger', 'Passenger'),
+        ('driver', 'Driver'),
+        ('admin', 'Admin')
+    )
+
+    #other attributes
+    #you don't need to redefine fields inherited from your base class
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='passenger')
+
     email = models.EmailField(max_length=254, unique=True)
     name = models.CharField(max_length=254, null=True, blank=True)
     is_staff = models.BooleanField(default=False)
@@ -53,8 +64,22 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
     def get_email(self):
         return self.email
 
-# -----I will explain this part later. So let's keep it commented for now-------
+    @property
+    def is_passenger(self):
+        return self.role == 'passenger'
 
+    @property
+    def is_driver(self):
+        return self.role == 'driver'
+
+
+# view function
+# @login_required
+# def index(request, *args, **kwargs):
+#     if request.user.is_passenger:
+#         #do something
+#     elif request.user.is_driver:
+#         #do something other
 
 class user_type(models.Model):
     is_driver = models.BooleanField(default=False)

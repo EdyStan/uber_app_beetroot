@@ -96,12 +96,20 @@
                     <form method="POST" action="">
                         {% csrf_token %}
 
-                        <div class="input-group mb-3">
+                        <div class="input-group mb-2">
                             <div class="input-group-append">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
                             <input type="text" name="username" placeholder="Username..." class="form-control">
                         </div>
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-car-alt"></i></span>
+                            </div>
+                            <input type="text" name="role" placeholder="Role..." class="form-control">
+                        </div>
+
                         <div class="input-group mb-2">
                             <div class="input-group-append">
                                 <span class="input-group-text"><i class="fas fa-key"></i></span>
