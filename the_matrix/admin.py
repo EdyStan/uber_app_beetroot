@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from .models import AppUser, user_type
+from .models import AppUser, UserType
 
 
 class UserAdmin(BaseUserAdmin):
@@ -38,4 +38,4 @@ admin.site.register(AppUser, UserAdmin)
 # We can register our models like before
 # This was the model we commented in the previous snippet.
 
-admin.site.register(user_type)
+admin.site.register(UserType)

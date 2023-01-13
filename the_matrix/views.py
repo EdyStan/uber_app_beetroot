@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import CreateUserForm, CreateUserFormWithRole
 from django.contrib import messages
-from .models import user_type, AppUser
+from .models import UserType, AppUser
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -37,7 +37,7 @@ def login_page(request):
 
         if user is not None:
             login(request, user)
-            type_obj = user_type.objects.get(user=user)
+            type_obj = UserType.objects.get(user=user)
             if user.is_authenticated and type_obj.is_passenger:
                 return redirect('passenger_menu')  # Go to student home
             elif user.is_authenticated and type_obj.is_driver:
@@ -56,9 +56,9 @@ def logout_user(request):
 
 @login_required(login_url='login')
 def passenger_page(request):
-    if user_type.objects.get(user=request.user).is_passenger:
+    if UserType.objects.get(user=request.user).is_passenger:
         return render(request, 'main_app/passenger_page.html')
-    elif user_type.objects.get(user=request.user).is_driver:
+    elif UserType.objects.get(user=request.user).is_driver:
         return redirect('driver_menu')
     else:
         return redirect('home')
@@ -66,9 +66,9 @@ def passenger_page(request):
 
 @login_required(login_url='login')
 def driver_page(request):
-    if user_type.objects.get(user=request.user).is_driver:
+    if UserType.objects.get(user=request.user).is_driver:
         return render(request, 'main_app/driver_page.html')
-    elif user_type.objects.get(user=request.user).is_passenger:
+    elif UserType.objects.get(user=request.user).is_passenger:
         return redirect('passenger_menu')
     else:
         return redirect('home')

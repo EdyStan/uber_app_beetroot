@@ -40,8 +40,8 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
         ('admin', 'Admin')
     )
 
-    #other attributes
-    #you don't need to redefine fields inherited from your base class
+    # other attributes
+    # you don't need to redefine fields inherited from your base class
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='passenger')
 
     email = models.EmailField(max_length=254, unique=True)
@@ -81,7 +81,7 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
 #     elif request.user.is_driver:
 #         #do something other
 
-class user_type(models.Model):
+class UserType(models.Model):
     is_driver = models.BooleanField(default=False)
     is_passenger = models.BooleanField(default=False)
     user = models.OneToOneField(AppUser, on_delete=models.CASCADE)
