@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from .forms import CreateUserForm
+from .forms import CreateUserForm, CreateUserFormWithRole
 from django.contrib import messages
+from .models import user_type, AppUser
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -11,46 +12,38 @@ def home_page(request):
     return render(request, 'main_app/main_page.html', {})
 
 
-def driver_page(request):
-    return render(request, 'main_app/driver_page.html')
-
-
-def passenger_page(request):
-    return render(request, 'main_app/passenger_page.html')
-
-
 def register_page(request):
-    # if request.user.is_authenticated:
-    #     return redirect('home')
+    if request.user.is_authenticated:
+        return redirect('home')
 
-    form = CreateUserForm()
+    form = CreateUserFormWithRole()
 
     if request.method == 'POST':
-        form = CreateUserForm(request.POST)
+        form = CreateUserFormWithRole(request.POST)
         if form.is_valid():
-            form.save()
-            user = form.cleaned_data.get('username')
-            messages.success(request, 'Account was created for ' + user)
+            user_name = form.cleaned_data.get('username')
+            messages.success(request, 'Account was created for ' + user_name)
 
             return redirect('login')
     return render(request, 'main_app/register.html', {'form': form})
 
 
 def login_page(request):
-    # if request.user.is_authenticated:
-    #     return redirect('home')
-
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(request, username=username, password=password)
+        email = request.POST.get('email')  # Get email value from form
+        password = request.POST.get('password')  # Get password value from form
+        user = authenticate(request, email=email, password=password)
 
         if user is not None:
             login(request, user)
-            return redirect('home')
+            type_obj = user_type.objects.get(user=user)
+            if user.is_authenticated and type_obj.is_passenger:
+                return redirect('passenger_menu')  # Go to student home
+            elif user.is_authenticated and type_obj.is_driver:
+                return redirect('driver_menu')  # Go to teacher home
         else:
-            messages.info(request, 'Username OR password is incorrect!')
+            # Invalid email or password. Handle as you wish
+            return redirect('home')
 
     return render(request, 'main_app/login.html', {})
 
@@ -58,3 +51,21 @@ def login_page(request):
 def logout_user(request):
     logout(request)
     return redirect('login')
+
+
+def passenger_page(request):
+    if request.user.is_authenticated and user_type.objects.get(user=request.user).is_passenger:
+        return render(request, 'main_app/passenger_page.html')
+    elif request.user.is_authenticated and user_type.objects.get(user=request.user).is_driver:
+        return redirect('driver_menu')
+    else:
+        return redirect('home')
+
+
+def driver_page(request):
+    if request.user.is_authenticated and user_type.objects.get(user=request.user).is_driver:
+        return render(request, 'main_app/driver_page.html')
+    elif request.user.is_authenticated and user_type.objects.get(user=request.user).is_student:
+        return redirect('passenger_menu')
+    else:
+        return redirect('home')

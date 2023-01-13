@@ -7,5 +7,5 @@ urlpatterns = [
     path('login/', views.login_page, name='login'),
     path('logout/', views.logout_user, name='logout'),
     path('driver/', views.driver_page, name='driver_menu'),
-    path('passenger/', views.passenger_page, name='passenger_menu')
+    path('passenger/', views.passenger_page, name='passenger_menu'),
 ]

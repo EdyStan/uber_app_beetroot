@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'bootstrap5',
 ]
 
+AUTH_USER_MODEL = "the_matrix.AppUser"
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
