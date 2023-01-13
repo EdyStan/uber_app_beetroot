@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'the_matrix',
+    'the_matrix.apps.TheMatrixConfig',
     'main_app',
     'bootstrap5',
 ]

@@ -16,15 +16,15 @@ def register_page(request):
     if request.user.is_authenticated:
         return redirect('home')
 
-    form = CreateUserFormWithRole()
-
     if request.method == 'POST':
         form = CreateUserFormWithRole(request.POST)
         if form.is_valid():
-            user_name = form.cleaned_data.get('username')
+            form.save()
+            user_name = form.cleaned_data.get('name')
             messages.success(request, 'Account was created for ' + user_name)
-
             return redirect('login')
+    else:
+        form = CreateUserFormWithRole()
     return render(request, 'main_app/register.html', {'form': form})
 
 
@@ -32,16 +32,15 @@ def login_page(request):
     if request.method == 'POST':
         email = request.POST.get('email')  # Get email value from form
         password = request.POST.get('password')  # Get password value from form
-        role = request.POST.get('role')
-        user = authenticate(request, email=email, role=role, password=password)
+        user = authenticate(request, email=email, password=password)
 
         if user is not None:
             login(request, user)
             type_obj = UserType.objects.get(user=user)
             if user.is_authenticated and type_obj.is_passenger:
-                return redirect('passenger_menu')  # Go to student home
+                return redirect('passenger_menu')  # Go to passenger home
             elif user.is_authenticated and type_obj.is_driver:
-                return redirect('driver_menu')  # Go to teacher home
+                return redirect('driver_menu')  # Go to driver home
         else:
             # Invalid email or password. Handle as you wish
             return redirect('home')
@@ -56,9 +55,9 @@ def logout_user(request):
 
 @login_required(login_url='login')
 def passenger_page(request):
-    if UserType.objects.get(user=request.user).is_passenger:
-        return render(request, 'main_app/passenger_page.html')
-    elif UserType.objects.get(user=request.user).is_driver:
+    if UserType.objects.get(user=request.user).role == 'passenger':
+        return render(request, f'main_app/passenger_page.html')
+    elif UserType.objects.get(user=request.user).role == 'driver':
         return redirect('driver_menu')
     else:
         return redirect('home')
@@ -66,9 +65,9 @@ def passenger_page(request):
 
 @login_required(login_url='login')
 def driver_page(request):
-    if UserType.objects.get(user=request.user).is_driver:
-        return render(request, 'main_app/driver_page.html')
-    elif UserType.objects.get(user=request.user).is_passenger:
+    if UserType.objects.get(user=request.user).role == 'driver':
+        return render(request, f'main_app/driver_page.html')
+    elif UserType.objects.get(user=request.user) == 'passenger':
         return redirect('passenger_menu')
     else:
         return redirect('home')
