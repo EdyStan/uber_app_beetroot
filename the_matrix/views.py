@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import CreateUserForm
+from .forms import CreateUserForm, CreateUserFormWithRole
 from django.contrib import messages
 from .models import user_type, AppUser
 
@@ -29,28 +29,19 @@ def home_page(request):
 #     return render(request, 'main_app/register.html', {'form': form})
 
 def register_page(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
+    form = CreateUserFormWithRole()
+
     if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        ps = request.POST.get('passenger')
-        dr = request.POST.get('driver')
+        form = CreateUserFormWithRole(request.POST)
+        if form.is_valid():
+            user_name = form.cleaned_data.get('username')
+            messages.success(request, 'Account was created for ' + user_name)
 
-        user = AppUser.objects.create_user(
-            email=email,
-        )
-        user.set_password(password)
-        user.save()
-
-        usert = None
-        if ps:
-            usert = user_type(user=user, is_passenger=True)
-        elif dr:
-            usert = user_type(user=user, is_driver=True)
-
-        usert.save()
-        # Successfully registered. Redirect to homepage
-        return redirect('login')
-    return render(request, 'main_app/register.html')
+            return redirect('login')
+    return render(request, 'main_app/register.html', {'form': form})
 
 
 def login_page(request):
