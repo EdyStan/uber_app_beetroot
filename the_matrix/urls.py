@@ -7,7 +7,7 @@ urlpatterns = [
     path('login/', common.login_user, name='login'),
     path('register/driver/', drivers.DriverSignUpView.as_view(), name='register_driver'),
     path('register/passenger/', passengers.PassengerSignUpView.as_view(), name='register_passenger'),
-    path('logout/', common.logout, name='logout'),
+    path('logout/', common.logout_user, name='logout'),
     path('driver/', drivers.driver_page, name='driver_page'),
     path('passenger/', passengers.passenger_page, name='passenger_page'),
 ]

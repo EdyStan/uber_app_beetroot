@@ -3,8 +3,8 @@ from django.db import models
 
 
 class User(AbstractUser):
-    is_student = models.BooleanField(default=False)
-    is_teacher = models.BooleanField(default=False)
+    is_driver = models.BooleanField(default=False)
+    is_passenger = models.BooleanField(default=False)
 
 
 class PassengerUser(models.Model):
