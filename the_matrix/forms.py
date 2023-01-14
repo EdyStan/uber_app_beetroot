@@ -1,20 +1,31 @@
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from .models import DriverUser
 from django import forms
+from django.db import transaction
+
+from .models import User
 
 
-class NewDriverForm(UserCreationForm):
-    email = forms.EmailField(required=True)
+class NewDriverForm(UserCreationForm):  # TODO: email field
 
-    class Meta:
-        model = DriverUser
-        fields = ["username", "email", "password1", "password2"]
+    class Meta(UserCreationForm.Meta):
+        model = User
 
-    def save(self, commit=True):
-        user = super(NewDriverForm, self).save(commit=False)
-        user.email = self.cleaned_data['email']
-        if commit:
-            user.save()
+    @transaction.atomic
+    def save(self):
+        user = super().save(commit=False)
+        user.is_driver = True
+        user.save()
         return user
 
+
+class NewPassengerForm(UserCreationForm):  # TODO: email field
+
+    class Meta(UserCreationForm.Meta):
+        model = User
+
+    @transaction.atomic
+    def save(self):
+        user = super().save(commit=False)
+        user.is_driver = True
+        user.save()
+        return user

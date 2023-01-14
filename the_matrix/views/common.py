@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
-from .forms import NewDriverForm
+from ..forms import NewDriverForm
 from django.contrib import messages
 # from .models import DriverUser
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 
@@ -11,6 +11,10 @@ from django.contrib.auth.decorators import login_required
 # @login_required(login_url='login')
 def home_page(request):
     return render(request, 'main_app/main_page.html', {})
+
+
+def register_choices(request):
+    return render(request, 'main_app/register_choices.html', {})
 
 
 def register_driver(request):
@@ -31,7 +35,7 @@ def register_driver(request):
     return render(request, 'main_app/register_driver.html', {'form': form})
 
 
-def login_driver(request):
+def login_user(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -56,5 +60,3 @@ def logout_user(request):
     return render(request, 'main_app/main_page.html', {})
 
 
-def driver_page(request):
-    return render(request, 'main_app/driver_page.html', {})

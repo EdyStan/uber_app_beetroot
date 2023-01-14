@@ -1,11 +1,13 @@
 from django.urls import path
-from . import views
+from .views import passengers, drivers, common
 
 urlpatterns = [
-    path('', views.home_page, name='home'),
-    path('register/', views.register_driver, name='register_driver'),
-    path('login/', views.login_driver, name='login_driver'),
-    path('logout/', views.logout_user, name='logout'),
-    path('driver/', views.driver_page, name='driver_page'),
-    # path('passenger/', views.passenger_page, name='passenger_menu'),
+    path('', common.home_page, name='home'),
+    path('register/', common.register_choices, name='register_choices'),  # register menu to choose if driver of passenger
+    path('login/', common.login_user, name='login'),
+    path('register/driver/', drivers.DriverSignUpView.as_view(), name='register_driver'),
+    path('register/passenger/', passengers.PassengerSignUpView.as_view(), name='register_passenger'),
+    path('logout/', common.logout, name='logout'),
+    path('driver/', drivers.driver_page, name='driver_page'),
+    path('passenger/', passengers.passenger_page, name='passenger_page'),
 ]
