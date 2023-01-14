@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
-from .forms import CreateUserForm, CreateUserFormWithRole
+from .forms import NewDriverForm
 from django.contrib import messages
-from .models import UserType, AppUser
+# from .models import DriverUser
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -12,62 +13,48 @@ def home_page(request):
     return render(request, 'main_app/main_page.html', {})
 
 
-def register_page(request):
+def register_driver(request):
     if request.user.is_authenticated:
         return redirect('home')
 
     if request.method == 'POST':
-        form = CreateUserFormWithRole(request.POST)
+        form = NewDriverForm(request.POST)
         if form.is_valid():
-            form.save()
-            user_name = form.cleaned_data.get('name')
+            user = form.save()
+            user_name = form.cleaned_data.get('username')
             messages.success(request, 'Account was created for ' + user_name)
-            return redirect('login')
+            if user is not None:
+                return redirect('login_driver')
     else:
-        form = CreateUserFormWithRole()
-    return render(request, 'main_app/register.html', {'form': form})
+        form = NewDriverForm()
+        messages.error(request, 'Unsuccessful registration.')
+    return render(request, 'main_app/register_driver.html', {'form': form})
 
 
-def login_page(request):
+def login_driver(request):
     if request.method == 'POST':
-        email = request.POST.get('email')  # Get email value from form
-        password = request.POST.get('password')  # Get password value from form
-        user = authenticate(request, email=email, password=password)
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
 
-        if user is not None:
-            login(request, user)
-            type_obj = UserType.objects.get(user=user)
-            if user.is_authenticated and type_obj.is_passenger:
-                return redirect('passenger_menu')  # Go to passenger home
-            elif user.is_authenticated and type_obj.is_driver:
-                return redirect('driver_menu')  # Go to driver home
+            if user is not None:
+                login(request, user)
+                # messages.info(request, f"You are now logged in as {username}.")
+                return redirect("driver_page")
+            else:
+                messages.error(request, "Invalid username or password!")
         else:
-            # Invalid email or password. Handle as you wish
-            return redirect('home')
-
-    return render(request, 'main_app/login.html', {})
+            messages.error(request, "Invalid username or password!")
+    form = AuthenticationForm()
+    return render(request, 'main_app/login.html', {"login_form": form})
 
 
 def logout_user(request):
     logout(request)
-    return redirect('login')
+    return render(request, 'main_app/main_page.html', {})
 
 
-@login_required(login_url='login')
-def passenger_page(request):
-    if UserType.objects.get(user=request.user).role == 'passenger':
-        return render(request, f'main_app/passenger_page.html')
-    elif UserType.objects.get(user=request.user).role == 'driver':
-        return redirect('driver_menu')
-    else:
-        return redirect('home')
-
-
-@login_required(login_url='login')
 def driver_page(request):
-    if UserType.objects.get(user=request.user).role == 'driver':
-        return render(request, f'main_app/driver_page.html')
-    elif UserType.objects.get(user=request.user) == 'passenger':
-        return redirect('passenger_menu')
-    else:
-        return redirect('home')
+    return render(request, 'main_app/driver_page.html', {})

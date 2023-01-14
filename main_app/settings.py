@@ -41,9 +41,13 @@ INSTALLED_APPS = [
     'the_matrix.apps.TheMatrixConfig',
     'main_app',
     'bootstrap5',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
-AUTH_USER_MODEL = "the_matrix.AppUser"
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+# AUTH_USER_MODEL = "the_matrix.User"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
