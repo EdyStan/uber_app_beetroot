@@ -3,8 +3,8 @@ from ..forms import NewDriverForm
 from django.contrib import messages
 # from .models import DriverUser
 
-from django.contrib.auth import authenticate, logout, login
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, logout, login, update_session_auth_hash
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -63,3 +63,22 @@ def logout_user(request):
     return render(request, 'main_app/main_page.html', {})
 
 
+@login_required
+def password_change(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            if user.is_driver:
+                return redirect('driver_page')
+            elif user.is_passenger:
+                return redirect('passenger_page')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'main_app/password_reset_confirm.html', {
+        'form': form
+    })

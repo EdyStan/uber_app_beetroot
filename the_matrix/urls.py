@@ -10,4 +10,5 @@ urlpatterns = [
     path('logout/', common.logout_user, name='logout'),
     path('driver/', drivers.driver_page, name='driver_page'),
     path('passenger/', passengers.passenger_page, name='passenger_page'),
+    path("password_change/", common.password_change, name="password_change"),
 ]
