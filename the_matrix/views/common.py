@@ -46,7 +46,10 @@ def login_user(request):
             if user is not None:
                 login(request, user)
                 # messages.info(request, f"You are now logged in as {username}.")
-                return redirect("driver_page")
+                if user.is_driver:
+                    return redirect("driver_page")
+                elif user.is_passenger:
+                    return redirect("passenger_page")
             else:
                 messages.error(request, "Invalid username or password!")
         else:
