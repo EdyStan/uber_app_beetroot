@@ -27,8 +27,7 @@ class Order(models.Model):
     id = models.IntegerField(primary_key=True)
     start_location = models.CharField(max_length=100)
     destination = models.CharField(max_length=100)  # TODO: find ways to connect to Google API
-    passenger = models.ForeignKey(PassengerUser, unique=True,  on_delete=models.SET_NULL)
-    driver = models.ForeignKey(DriverUser, unique=True, on_delete=models.SET_NULL, blank=True, null=True)
-    # or SET_DEFAULT (instead of SET_NULL), we will think about that
+    passenger = models.OneToOneField(PassengerUser, on_delete=models.SET_DEFAULT, default=None, null=True)
+    driver = models.OneToOneField(DriverUser, on_delete=models.SET_DEFAULT, default=None, null=True)
     price = models.FloatField(default=0)
     is_rated = models.BooleanField(default=False)
