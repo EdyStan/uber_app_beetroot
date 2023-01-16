@@ -9,7 +9,8 @@ urlpatterns = [
     path('register/passenger/', passengers.PassengerSignUpView.as_view(), name='register_passenger'),
     path('logout/', common.logout_user, name='logout'),
     path('driver/', drivers.driver_page, name='driver_page'),
-    path('driver_available_orders', drivers.driver_available_orders, name='driver_available_orders'),
+    path('driver_available_orders/', drivers.driver_available_orders, name='driver_available_orders'),
+    path('driver_order/<int:order_id>', drivers.driver_order, name='driver_order'),
     path('passenger/', passengers.passenger_page, name='passenger_page'),
     path("password_change/", common.password_change, name="password_change"),
 ]
