@@ -3,7 +3,7 @@ from django.views.generic import CreateView
 from django.shortcuts import render, redirect
 
 from ..forms import NewDriverForm
-from ..models import User
+from ..models import User, Order
 from ..decorators import driver_required
 
 
@@ -25,3 +25,8 @@ class DriverSignUpView(CreateView):
 @driver_required
 def driver_page(request):
     return render(request, 'main_app/driver_page.html', {})
+
+@driver_required
+def driver_available_orders(request):
+    all_orders = Order.objects.all()
+    return render(request, 'main_app/driver_available_orders.html', context={'available_orders_list': all_orders})
