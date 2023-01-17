@@ -3,7 +3,7 @@ from django.views.generic import CreateView
 from django.shortcuts import render, redirect
 
 from ..forms import NewDriverForm
-from ..models import User
+from ..models import User, Order, DriverUser
 from ..decorators import driver_required
 
 
@@ -25,3 +25,35 @@ class DriverSignUpView(CreateView):
 @driver_required
 def driver_page(request):
     return render(request, 'main_app/driver_page.html', {})
+
+@driver_required
+def driver_available_orders(request):
+    all_orders = Order.objects.all().filter(driver=None)
+    # TODO: is_rated = False we use to get not completed orders. Need to replace with status
+    usr: User=request.user
+    drv = DriverUser.objects.get(user=usr)
+    assigned_orders = Order.objects.filter(driver=drv).filter(is_rated=False)
+    return render(request, 'main_app/driver_orders.html', context={'assigned_orders': assigned_orders, 'available_orders_list': all_orders})
+
+@driver_required
+def driver_executed_orders(request):
+    # TODO: is_rated = False we use to get not completed orders. Need to replace with status
+    usr: User=request.user
+    drv = DriverUser.objects.get(user=usr)
+    executed_orders = Order.objects.filter(driver=drv).filter(is_rated=True)
+    return render(request, 'main_app/driver_orders.html', context={'executed_orders': executed_orders})
+
+
+@driver_required
+def driver_income(request):
+    # TODO: is_rated = False we use to get not completed orders. Need to replace with status
+    usr: User=request.user
+    drv = DriverUser.objects.get(user=usr)
+    income = drv.amount_of_money
+    return render(request, 'main_app/driver_income.html', context={'income': income})
+
+@driver_required
+def driver_order(request, order_id):
+    order = Order.objects.get(pk=order_id)
+    return render(request, 'main_app/driver_order.html', context={'order': order})
+
