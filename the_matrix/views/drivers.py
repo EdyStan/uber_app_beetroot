@@ -33,7 +33,24 @@ def driver_available_orders(request):
     usr: User=request.user
     drv = DriverUser.objects.get(user=usr)
     assigned_orders = Order.objects.filter(driver=drv).filter(is_rated=False)
-    return render(request, 'main_app/driver_available_orders.html', context={'assigned_orders': assigned_orders, 'available_orders_list': all_orders})
+    return render(request, 'main_app/driver_orders.html', context={'assigned_orders': assigned_orders, 'available_orders_list': all_orders})
+
+@driver_required
+def driver_executed_orders(request):
+    # TODO: is_rated = False we use to get not completed orders. Need to replace with status
+    usr: User=request.user
+    drv = DriverUser.objects.get(user=usr)
+    executed_orders = Order.objects.filter(driver=drv).filter(is_rated=True)
+    return render(request, 'main_app/driver_orders.html', context={'executed_orders': executed_orders})
+
+
+@driver_required
+def driver_income(request):
+    # TODO: is_rated = False we use to get not completed orders. Need to replace with status
+    usr: User=request.user
+    drv = DriverUser.objects.get(user=usr)
+    income = drv.amount_of_money
+    return render(request, 'main_app/driver_income.html', context={'income': income})
 
 @driver_required
 def driver_order(request, order_id):

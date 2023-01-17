@@ -62,8 +62,8 @@
 {% endblock %}
 
 {% block content %}
-<section class="container">
-    <h1 class="text-center m-4 fw-light">To do:</h1>
-    <p class="text-center"> show order detail, map, start location, end location, route from current position, route for client, price, reject button, start button.</p>
+<section class="py-5 container text-center">
+    <h1 class="text-center m-4 fw-light">{{ user.username }}, your current income is</h1>
+    <p class="text-center"><strong style="font-size:5rem">{{ income }}</strong></p>
 </section>
 {% endblock %}
