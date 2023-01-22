@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'bootstrap5',
     'crispy_forms',
     'crispy_bootstrap5',
+    'channels',
+    'chat',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
@@ -78,6 +80,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'main_app.wsgi.application'
+ASGI_APPLICATION = 'main_app.asgi.application'
 
 
 # Database
