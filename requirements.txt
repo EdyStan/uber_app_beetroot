@@ -9,3 +9,4 @@ crispy-bootstrap5
 # dependency >= 4.1.1           # Minimum version 4.1.1
 # dependency != 3.5             # Version Exclusion. Anything except version 3.5
 # dependency ~= 1.1             # Compatible release. Same as >= 1.1, == 1.*
+Django~=4.1.5
