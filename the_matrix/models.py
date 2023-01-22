@@ -1,7 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-
 class User(AbstractUser):
     is_driver = models.BooleanField(default=False)
     is_passenger = models.BooleanField(default=False)
@@ -22,12 +21,20 @@ class DriverUser(models.Model):
 # more information about potential values of "on_delete="
 # https://stackoverflow.com/questions/38388423/what-does-on-delete-do-on-django-models
 
+class OrderStatus(models.IntegerChoices):
+    UNASSIGNED = 0, 'Unassigned'
+    ASSIGNED = 1, 'Assigned'
+    IN_PROGRESS = 2, 'In Progress'
+    COMPLETED = 3, 'Completed'
 
 class Order(models.Model):
     id = models.IntegerField(primary_key=True)
-    start_location = models.CharField(max_length=100)
-    destination = models.CharField(max_length=100)  # TODO: find ways to connect to Google API
+    start_location_lat = models.CharField(max_length=20)
+    start_location_lon = models.CharField(max_length=20)
+    destination_lat = models.CharField(max_length=20)
+    destination_lon = models.CharField(max_length=20)
     passenger = models.OneToOneField(PassengerUser, on_delete=models.SET_DEFAULT, default=None, null=True)
     driver = models.OneToOneField(DriverUser, on_delete=models.SET_DEFAULT, default=None, null=True)
     price = models.FloatField(default=0)
     is_rated = models.BooleanField(default=False)
+    status = models.IntegerField(choices=OrderStatus.choices, default=OrderStatus.UNASSIGNED)
