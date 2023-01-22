@@ -1,6 +1,7 @@
 ###### Requirements without Version Specifiers ######
 django-bootstrap-v5
 crispy-bootstrap5
+googlemaps
 
 ###### Requirements with Version Specifiers ######
 # dependency == 0.6.1           

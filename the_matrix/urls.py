@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import passengers, drivers, common
+from .views import passengers, drivers, common, order_details
 
 urlpatterns = [
     path('', common.home_page, name='home'),
@@ -15,4 +15,6 @@ urlpatterns = [
     path('driver_order/<int:order_id>/', drivers.driver_order, name='driver_order'),
     path('passenger/', passengers.passenger_page, name='passenger_page'),
     path("password_change/", common.password_change, name="password_change"),
+    # google maps here
+    path('geocode/', order_details.geocode, name="geocode"),
 ]
