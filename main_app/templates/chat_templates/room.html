@@ -174,6 +174,10 @@
             background-color: slateblue;
         }
 
+        #chat-messages {
+            height: 400px;
+            overflow-y: auto;
+        }
 
     </style>
 {% endblock %}
@@ -191,64 +195,71 @@
                             style="border-top-left-radius: 15px; border-top-right-radius: 15px;"
                             id='top_header_chat'>
                         <i class="fas fa-angle-left"></i>
-                        <p class="mb-0 fw-bold">Live chat</p>
+                        <p class="mb-0 fw-bold">Live chat with {{ room.slug }}</p>
                         <i class="fas fa-times"></i>
                     </div>
                     <div class="card-body">
                         <div id="chat-messages">
 
                             {% for message in messages %}
-                                <div class="p-4 bg-gray-200 rounded-xl">
-                                    <p class="font-semibold">{{ message.user.username  }}</p>
-                                    <p>{{ message.content }}</p>
+
+                                <div class="d-flex flex-row justify-content-start mb-4">
+                                    <img src="{% static 'media/andrew.png' %}"
+                                         alt="avatar 1" style="width: 45px; height: 100%;">
+                                    <p class="font-semibold">{{ message.user.username }}</p>
+                                    <div class="p-3 ms-3"
+                                         style="border-radius: 15px; background-color: rgba(104, 99, 212,.4);">
+                                        <p class="small mb-0">{{ message.content }}</p>
+                                    </div>
+                                </div>
 
                                 </div>
 
                             {% endfor %}
-{#                        <div class="d-flex flex-row justify-content-start mb-4">#}
-{#                            <img src="{% static 'media/andrew.png' %}"#}
-{#                                 alt="avatar 1" style="width: 45px; height: 100%;">#}
-{#                            <div class="p-3 ms-3"#}
-{#                                 style="border-radius: 15px; background-color: rgba(104, 99, 212,.4);">#}
-{#                                <p class="small mb-0">Hello and thank you for visiting MDBootstrap. Please click the#}
-{#                                    video#}
-{#                                    below.</p>#}
-{#                            </div>#}
-{#                        </div>#}
+                        {#                        <div class="d-flex flex-row justify-content-start mb-4">#}
+                        {#                            <img src="{% static 'media/andrew.png' %}"#}
+                        {#                                 alt="avatar 1" style="width: 45px; height: 100%;">#}
+                        {#                            <div class="p-3 ms-3"#}
+                        {#                                 style="border-radius: 15px; background-color: rgba(104, 99, 212,.4);">#}
+                        {#                                <p class="small mb-0">Hello and thank you for visiting MDBootstrap. Please click the#}
+                        {#                                    video#}
+                        {#                                    below.</p>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+                        {##}
+                        {#                        <div class="d-flex flex-row justify-content-end mb-4">#}
+                        {#                            <div class="p-3 me-3 border" style="border-radius: 15px; background-color: #fbfbfb;">#}
+                        {#                                <p class="small mb-0">Thank you, I really like your product.</p>#}
+                        {#                            </div>#}
+                        {#                            <img src="{% static 'media/andrew.png' %}"#}
+                        {#                                 alt="avatar 1" style="width: 45px; height: 100%;">#}
+                        {#                        </div>#}
+                    </div>
 
-{#                        <div class="d-flex flex-row justify-content-end mb-4">#}
-{#                            <div class="p-3 me-3 border" style="border-radius: 15px; background-color: #fbfbfb;">#}
-{#                                <p class="small mb-0">Thank you, I really like your product.</p>#}
-{#                            </div>#}
-{#                            <img src="{% static 'media/andrew.png' %}"#}
-{#                                 alt="avatar 1" style="width: 45px; height: 100%;">#}
-{#                        </div>#}
-                        </div>
-
-                        <div class="form-outline">
-                            <form method="post" action="." class="flex">
-                                {#                                {{% csrf_token %}}#}
-                                <div class="container">
-                                    <div class="row justify-content-md-center align-items-center">
-                                        <div class="col-md-10" style="padding: 5px">
-                                            <input type="text" name="content"
-                                                   class="form-control"
-                                                   placeholder="Your message.."
-                                                   id="chat-message-input">
-                                        </div>
-                                        <div class="col-md-2">
-                                            <button class="btn py-2" id="chat_btn" style="color: black">
-                                                Send
-                                            </button>
-                                        </div>
+                    <div class="form-outline">
+                        <form method="post" action="." class="flex">
+                            {% csrf_token %}
+                            <div class="container">
+                                <div class="row justify-content-md-center align-items-center">
+                                    <div class="col-md-10" style="padding: 5px">
+                                        <input type="text" name="content"
+                                               class="form-control"
+                                               placeholder="Your message.."
+                                               id="chat-message-input">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn py-2" id="chat_btn" style="color: black">
+                                            Send
+                                        </button>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 {% endblock %}
 
@@ -264,7 +275,7 @@
             + window.location.host
             + '/ws/'
             + roomName
-            + '/',
+            + '/'
         );
 
         chatSocket.onmessage = function (e) {
@@ -273,11 +284,13 @@
             const data = JSON.parse(e.data);
             if (data.message) {
                 document.querySelector('#chat-messages').innerHTML += ('<b>' + data.username + '</b>: ' + data.message + '<br>');
+
+                scrollToBottom();
             } else {
                 alert('The message was empty!')
             }
 
-            scrollToBottom();
+
         };
 
         chatSocket.onclose = function (e) {
@@ -287,13 +300,14 @@
         document.querySelector('#chat-message-input').focus();
         document.querySelector('#chat-message-input').onkeyup = function (e) {
             if (e.keyCode === 13) {
-                document.querySelector('#chat-btn').click();
+                document.querySelector('#chat_btn').click();
             }
         };
 
 
-        document.querySelector('#chat-btn').onclick = function (e) {
+        document.querySelector('#chat_btn').onclick = function (e) {
             e.preventDefault();
+
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
 

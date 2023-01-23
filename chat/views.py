@@ -6,14 +6,14 @@ from .models import Room, Message
 
 @login_required
 def rooms(request):
-    all_rooms = Room.objects.all()
+    rooms = Room.objects.all()
 
-    return render(request, 'chat_templates/rooms.html', {'rooms': all_rooms})
+    return render(request, 'chat_templates/rooms.html', {'rooms': rooms})
 
 
 @login_required
 def room(request, slug):
-    chosen_room = Room.objects.get(slug=slug)
+    room = Room.objects.get(slug=slug)
     messages = Message.objects.filter(room=room)[0:25]
 
-    return render(request, 'chat_templates/room.html', {'room': chosen_room, 'messages': messages})
+    return render(request, 'chat_templates/room.html', {'room': room, 'messages': messages})
