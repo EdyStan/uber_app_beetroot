@@ -79,9 +79,14 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'main_app.wsgi.application'
+# WSGI_APPLICATION = 'main_app.wsgi.application'
 ASGI_APPLICATION = 'main_app.asgi.application'
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer'
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
