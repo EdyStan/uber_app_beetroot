@@ -184,7 +184,6 @@
 
 {% block content %}
 
-
     <div class="container py-5 h-100">
 
         <div class="d-flex justify-content-center h-100 align-items-center">
@@ -198,42 +197,10 @@
                         <p class="mb-0 fw-bold">Live chat with {{ room.slug }}</p>
                         <i class="fas fa-times"></i>
                     </div>
-                    <div class="card-body">
-                        <div id="chat-messages">
-
-                            {% for message in messages %}
-
-                                <div class="d-flex flex-row justify-content-start mb-4">
-                                    <img src="{% static 'media/andrew.png' %}"
-                                         alt="avatar 1" style="width: 45px; height: 100%;">
-                                    <p class="font-semibold">{{ message.user.username }}</p>
-                                    <div class="p-3 ms-3"
-                                         style="border-radius: 15px; background-color: rgba(104, 99, 212,.4);">
-                                        <p class="small mb-0">{{ message.content }}</p>
-                                    </div>
-                                </div>
-
-                                </div>
-
-                            {% endfor %}
-                        {#                        <div class="d-flex flex-row justify-content-start mb-4">#}
-                        {#                            <img src="{% static 'media/andrew.png' %}"#}
-                        {#                                 alt="avatar 1" style="width: 45px; height: 100%;">#}
-                        {#                            <div class="p-3 ms-3"#}
-                        {#                                 style="border-radius: 15px; background-color: rgba(104, 99, 212,.4);">#}
-                        {#                                <p class="small mb-0">Hello and thank you for visiting MDBootstrap. Please click the#}
-                        {#                                    video#}
-                        {#                                    below.</p>#}
-                        {#                            </div>#}
-                        {#                        </div>#}
-                        {##}
-                        {#                        <div class="d-flex flex-row justify-content-end mb-4">#}
-                        {#                            <div class="p-3 me-3 border" style="border-radius: 15px; background-color: #fbfbfb;">#}
-                        {#                                <p class="small mb-0">Thank you, I really like your product.</p>#}
-                        {#                            </div>#}
-                        {#                            <img src="{% static 'media/andrew.png' %}"#}
-                        {#                                 alt="avatar 1" style="width: 45px; height: 100%;">#}
-                        {#                        </div>#}
+                    <div class="card-body" id="chat-messages">
+                        {% for message in messages %}
+                            <b>{{ message.user.username }}</b>: {{ message.content }}<br>
+                        {% endfor %}
                     </div>
 
                     <div class="form-outline">
@@ -241,14 +208,14 @@
                             {% csrf_token %}
                             <div class="container">
                                 <div class="row justify-content-md-center align-items-center">
-                                    <div class="col-md-10" style="padding: 5px">
+                                    <div class="col-md-10" style="padding-bottom: 10px">
                                         <input type="text" name="content"
                                                class="form-control"
                                                placeholder="Your message.."
                                                id="chat-message-input">
                                     </div>
-                                    <div class="col-md-2">
-                                        <button class="btn py-2" id="chat_btn" style="color: black">
+                                    <div class="col-md-2" style="padding-bottom: 10px; padding-left: 5px">
+                                        <button class="btn py-2" id="chat_btn" style="color: white;">
                                             Send
                                         </button>
                                     </div>
@@ -260,7 +227,7 @@
             </div>
         </div>
     </div>
-    </div>
+
 {% endblock %}
 
 {% block scripts %}
@@ -284,13 +251,11 @@
             const data = JSON.parse(e.data);
             if (data.message) {
                 document.querySelector('#chat-messages').innerHTML += ('<b>' + data.username + '</b>: ' + data.message + '<br>');
-
                 scrollToBottom();
-            } else {
+            }
+            else {
                 alert('The message was empty!')
             }
-
-
         };
 
         chatSocket.onclose = function (e) {
@@ -306,7 +271,6 @@
 
 
         document.querySelector('#chat_btn').onclick = function (e) {
-            e.preventDefault();
 
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
@@ -323,20 +287,16 @@
                 'room': roomName
             }));
 
-            messageInputDom.value = '';
+            {#messageInputDom.value = '';#}
 
-            return false;
         };
 
-        /**
-         * A function for finding the messages element, and scroll to the bottom of it.
-         */
         function scrollToBottom() {
             let objDiv = document.querySelector("#chat-messages");
             objDiv.scrollTop = objDiv.scrollHeight;
         }
 
-        // Add this below the function to trigger the scroll on load.
+        // to trigger the scroll on load
         scrollToBottom();
 
     </script>

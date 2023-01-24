@@ -1,6 +1,7 @@
 ###### Requirements without Version Specifiers ######
 django-bootstrap-v5
 crispy-bootstrap5
+daphne
 channels~=4.0.0
 
 ###### Requirements with Version Specifiers ######
