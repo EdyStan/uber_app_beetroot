@@ -25,7 +25,8 @@
         <div class="d-flex justify-content-center h-100">
             <div class="user_card items-center">
                 <h1 style="color: white; align-self: center"> Rooms </h1>
-                {% for room in rooms %}
+                {% for room in rooms1 %}
+                    {% if room.user1 is not None %}
                     <div class="lg:w-1/4 px-3 py-3">
                         <div class="p-4 bg-white shadow rounded-xl text-center">
                             <h2 class="mb-5 text-2xl font-semibold" style="font-size: 35px">{{ room.name }}</h2>
@@ -33,6 +34,18 @@
                                style="font-size: 25px">Join</a>
                         </div>
                     </div>
+                    {% endif %}
+                {% endfor %}
+                {% for room in rooms2 %}
+                    {% if room.user1 is not None %}
+                    <div class="lg:w-1/4 px-3 py-3">
+                        <div class="p-4 bg-white shadow rounded-xl text-center">
+                            <h2 class="mb-5 text-2xl font-semibold" style="font-size: 35px">{{ room.name }}</h2>
+                            <a href="{% url 'room' room.slug %}" class="px-5 py-3 block rounded-xl text-black bg-teal-600 hover:bg-teal-700"
+                               style="font-size: 25px">Join</a>
+                        </div>
+                    </div>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
