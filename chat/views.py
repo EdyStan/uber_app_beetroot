@@ -1,5 +1,5 @@
 from django.http.response import HttpResponseBadRequest
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from the_matrix.models import User
 
@@ -23,5 +23,9 @@ def room(request, slug):
 
     room = Room.objects.get(slug=slug)
     messages = Message.objects.filter(room=room)
+
+    if not request.user.is_superuser:
+        if room.user1 != request.user and room.user2 != request.user:
+            return redirect('rooms')
 
     return render(request, 'chat_templates/room.html', {'room': room, 'messages': messages})
