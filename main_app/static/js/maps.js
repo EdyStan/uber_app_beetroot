@@ -17,6 +17,7 @@ function setup(start_lat, start_lon, end_lat, end_lon) {
 
 function initMap() {
     const myLatLng = { lat: (this.start_lat+this.end_lat)/2.0, lng: (this.start_lon+this.end_lon)/2.0 };
+    var bounds = new google.maps.LatLngBounds();
     console.log(myLatLng.lat, myLatLng.lng);
 
     const map = new google.maps.Map(document.getElementById("map"), {
@@ -24,8 +25,12 @@ function initMap() {
       center: myLatLng,
     });
     console.log("ADD PINS");
-    addPin({lat: this.start_lat, lng: this.start_lon}, map, "START");
-    addPin({lat: this.end_lat, lng: this.end_lon}, map, "FINISH");
+    const start = {lat: this.start_lat, lng: this.start_lon};
+    const end = {lat: this.end_lat, lng: this.end_lon};
+    bounds.extend(start);
+    bounds.extend(end);
+    addPin(start, map, "►");
+    addPin(end, map, "◼︎");
 }
 
 function addPin(location, map, label) {
@@ -34,8 +39,8 @@ function addPin(location, map, label) {
         map: map,
         label: {
            text: label,
-           fontSize: "12px",
-           color: "#e74c3c",
+           fontSize: "16px",
+           color: "#ffdddd",
            fontFamily: "montserrat"
         }
      });

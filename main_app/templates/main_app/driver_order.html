@@ -10,7 +10,7 @@
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
     <script src="{% static '/js/maps.js' %}" ></script>
     <script type ='text/javascript'>setup({{ order.start_location_lon }}, {{ order.start_location_lat }}, {{ order.destination_lon }}, {{ order.destination_lat }})</script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBbf1zO91BQPS7XBnuVO4uhj0j1a5ALJQo&callback=initMap"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&callback=initMap"></script>
 {% endblock %}
 
 {% block content %}
@@ -20,25 +20,11 @@
     <p class="text-center"> <strong>Destination:</strong> {{ order.destination_lat }}, {{ order.destination_lon }}</p>
     <p class="text-center"> <strong>Price:</strong> {{ order.price }}</p>
     <p class="text-center"> <strong>Passenger Name:</strong> {{ order.passenger.user.username }}</p>
-    <p class="text-center"> <strong>Start Location:</strong> {{ order.start_location }}</p>
-    
-    <p class="text-center"> show order detail, map, start location, end location, route from current position, route for client, price, reject button, start button.</p>
+    <p class="text-center"> <strong>Start Location:</strong> {{ order.start_location }}</p>    
 </section>
 <section class="container">
     <h1 class="text-center m-4 fw-light">Map</h1>
     <div class="pageholder">
-        <div class="titleholder"> 
-            <div class="title"><i class="fas fa-compass mr-2"></i> Google       Maps #1: Geocoding </div>
-        </div>
-    
-        <div class="linkholder">
-            Our latitude: {{latitude}}
-        </div>
-    
-        <div class="linkholder">
-            Our longitude: {{longitude}}
-        </div>
-
         <div class="row">
             <!-- Map -->
             <div id="map" class="col-12"></div>

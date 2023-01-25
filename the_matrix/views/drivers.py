@@ -1,6 +1,7 @@
 from django.contrib.auth import login
 from django.views.generic import CreateView
 from django.shortcuts import render, redirect
+from django.conf import settings
 
 from ..forms import NewDriverForm
 from ..models import User, Order, DriverUser
@@ -55,5 +56,10 @@ def driver_income(request):
 @driver_required
 def driver_order(request, order_id):
     order = Order.objects.get(pk=order_id)
-    return render(request, 'main_app/driver_order.html', context={'order': order})
+    context = {
+        'google_api_key':settings.GOOGLE_API_KEY,
+        'order': order
+        }
+
+    return render(request, 'main_app/driver_order.html', context=context)
 
