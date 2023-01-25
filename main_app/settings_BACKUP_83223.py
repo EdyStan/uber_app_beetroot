@@ -47,9 +47,12 @@ INSTALLED_APPS = [
     'bootstrap5',
     'crispy_forms',
     'crispy_bootstrap5',
+<<<<<<< HEAD
     'googlemaps',
+=======
     'channels',
     'chat',
+>>>>>>> origin
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'

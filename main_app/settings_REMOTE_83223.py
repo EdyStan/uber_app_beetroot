@@ -23,9 +23,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-!=t(fz@z8@c7ysvsm@e&&eefnpa01z3$fd4qpne@d-!3j^&r_q'
 
-GOOGLE_API_KEY = 'AIzaSyBbf1zO91BQPS7XBnuVO4uhj0j1a5ALJQo'
-BASE_COUNTRY = 'SK'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -47,7 +44,6 @@ INSTALLED_APPS = [
     'bootstrap5',
     'crispy_forms',
     'crispy_bootstrap5',
-    'googlemaps',
     'channels',
     'chat',
 ]

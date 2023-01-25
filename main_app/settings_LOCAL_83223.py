@@ -35,7 +35,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -48,8 +47,6 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'googlemaps',
-    'channels',
-    'chat',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
@@ -84,14 +81,8 @@ TEMPLATES = [
     },
 ]
 
-# WSGI_APPLICATION = 'main_app.wsgi.application'
-ASGI_APPLICATION = 'main_app.asgi.application'
+WSGI_APPLICATION = 'main_app.wsgi.application'
 
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer'
-    }
-}
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
