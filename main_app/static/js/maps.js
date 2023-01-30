@@ -37,7 +37,7 @@ function setup(start_lat, start_lon, end_lat, end_lon) {
 }
 
 function initMap() {
-    const myLatLng = { lat: (this.start_lat+this.end_lat)/2.0, lng: (this.start_lon+this.end_lon)/2.0 };
+    const myLatLng = { lat: ((this.start_lat || 0.0)+(this.end_lat||0.0))/2.0, lng: ((this.start_lon||0.0)+(this.end_lon||0.0))/2.0 };
     var bounds = new google.maps.LatLngBounds();
     console.log(myLatLng.lat, myLatLng.lng);
 
