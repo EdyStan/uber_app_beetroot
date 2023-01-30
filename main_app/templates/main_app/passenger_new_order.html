@@ -11,7 +11,13 @@
     <script src="{% static '/js/maps.js' %}" ></script>
     {% if order %}
     <script type ='text/javascript'>
-        setup( {{ order.start_location_lat }}, {{ order.start_location_lon }}, {{ order.destination_lat }}, {{ order.destination_lon }} );
+        {% if order.start_location_lat and order.start_location_lon and order.destination_lat and order.destination_lon %}
+        setup( {{ order.start_location_lat }}, {{ order.start_location_lon }}, {{ order.destination_lat }}, {{ order.destination_lon}} );
+        {% elif order.start_location_lat and order.start_location_lon %}
+        setup( {{ order.start_location_lat }}, {{ order.start_location_lon }}, null, null );
+        {% elif order.destination_lat and order.destination_lon %}
+        setup( null, null, {{ order.destination_lat }}, {{ order.destination_lon}} );
+        {% endif %}
     </script>
     {% endif %}
     <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&callback=initMap"></script>
