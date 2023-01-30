@@ -5,7 +5,6 @@ from django.conf import settings
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 
-
 from ..forms import NewPassengerForm, NewOrderForm
 from ..models import User, PassengerUser, Order, OrderStatus
 from ..decorators import passenger_required
@@ -30,6 +29,7 @@ class PassengerSignUpView(CreateView):
 def passenger_page(request):
     return render(request, 'main_app/passenger_page.html', {})
 
+
 # @passenger_required
 # def passenger_new_order(request):
 #     usr: User=request.user
@@ -41,15 +41,17 @@ def passenger_page(request):
 #         }
 #     return render(request, 'main_app/passenger_new_order.html', context=context)
 
+
 @passenger_required
 def passenger_new_order(request):
     print(request.POST)
-    usr: User=request.user
+    usr: User = request.user
     passenger = PassengerUser.objects.get(user=usr)
-    available_orders = Order.objects.filter(passenger=passenger).filter(~Q(status=OrderStatus.COMPLETED)) # ~ == NOT. Here we return only active orders for passenger
+    available_orders = Order.objects.filter(passenger=passenger).filter(
+        ~Q(status=OrderStatus.COMPLETED))  # ~ == NOT. Here we return only active orders for passenger
     last_order = available_orders.last()
-    if last_order == None:
-        last_order = Order(passenger= passenger, status=OrderStatus.NEW_ORDER, price=6.0)
+    if last_order is None:
+        last_order = Order(passenger=passenger, status=OrderStatus.NEW_ORDER, price=6.0)
         last_order.save()
     if last_order.status == OrderStatus.NEW_ORDER:
         data = {
@@ -61,24 +63,26 @@ def passenger_new_order(request):
             'order': last_order,
             'order_status_label': OrderStatus(last_order.status).label,
             'form': form,
-            'google_api_key':settings.GOOGLE_API_KEY
-            }
+            'google_api_key': settings.GOOGLE_API_KEY
+        }
         return render(request, 'main_app/passenger_new_order.html', context=context)
     else:
         return HttpResponseRedirect('/passenger_start_order/')
 
+
 @passenger_required
 def passenger_start_order(request):
-    usr: User=request.user
+    usr: User = request.user
     passenger = PassengerUser.objects.get(user=usr)
-    available_orders = Order.objects.filter(passenger=passenger).filter(~Q(status=OrderStatus.COMPLETED)) # ~ == NOT. Here we return only active orders for passenger
+    available_orders = Order.objects.filter(passenger=passenger).filter(
+        ~Q(status=OrderStatus.COMPLETED))  # ~ == NOT. Here we return only active orders for passenger
     last_order = available_orders.last()
     if not last_order:
         return HttpResponseRedirect('/passenger_new_order/')
     if request.method == 'POST':
         form = NewOrderForm(request.POST)
         print(f"---------!!!!! {form.data}")
-        if form.is_valid(): # TODO: Need to validate form data
+        if form.is_valid():  # TODO: Need to validate form data
             print(f"BOOOOOOM!!!!! {form.data}")
             start_coords = form.startCoordinates()
             end_coords = form.stopCoordinates()
@@ -125,6 +129,6 @@ def passenger_start_order(request):
     context = {
         'order': last_order,
         'order_status_label': OrderStatus(last_order.status).label,
-        'google_api_key':settings.GOOGLE_API_KEY
-        }
+        'google_api_key': settings.GOOGLE_API_KEY
+    }
     return render(request, 'main_app/passenger_new_order.html', context=context)
