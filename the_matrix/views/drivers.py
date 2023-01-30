@@ -1,9 +1,10 @@
 from django.contrib.auth import login
 from django.views.generic import CreateView
 from django.shortcuts import render, redirect
+from django.conf import settings
 
 from ..forms import NewDriverForm
-from ..models import User, Order, DriverUser
+from ..models import User, Order, DriverUser, OrderStatus
 from ..decorators import driver_required
 
 
@@ -29,24 +30,21 @@ def driver_page(request):
 @driver_required
 def driver_available_orders(request):
     all_orders = Order.objects.all().filter(driver=None)
-    # TODO: is_rated = False we use to get not completed orders. Need to replace with status
     usr: User=request.user
     drv = DriverUser.objects.get(user=usr)
-    assigned_orders = Order.objects.filter(driver=drv).filter(is_rated=False)
+    assigned_orders = Order.objects.filter(driver=drv).filter(status=OrderStatus.ASSIGNED)
     return render(request, 'main_app/driver_orders.html', context={'assigned_orders': assigned_orders, 'available_orders_list': all_orders})
 
 @driver_required
 def driver_executed_orders(request):
-    # TODO: is_rated = False we use to get not completed orders. Need to replace with status
     usr: User=request.user
     drv = DriverUser.objects.get(user=usr)
-    executed_orders = Order.objects.filter(driver=drv).filter(is_rated=True)
+    executed_orders = Order.objects.filter(driver=drv).filter(status=OrderStatus.COMPLETED)
     return render(request, 'main_app/driver_orders.html', context={'executed_orders': executed_orders})
 
 
 @driver_required
 def driver_income(request):
-    # TODO: is_rated = False we use to get not completed orders. Need to replace with status
     usr: User=request.user
     drv = DriverUser.objects.get(user=usr)
     income = drv.amount_of_money
@@ -55,5 +53,30 @@ def driver_income(request):
 @driver_required
 def driver_order(request, order_id):
     order = Order.objects.get(pk=order_id)
-    return render(request, 'main_app/driver_order.html', context={'order': order})
+    if request.method == 'POST':
+        action = request.POST['button']
+        usr: User=request.user
+        drv = DriverUser.objects.get(user=usr)
+        if action == 'ASSIGN':
+            if order.status == OrderStatus.UNASSIGNED and not order.driver:
+                order.status = OrderStatus.ASSIGNED
+                order.driver = drv
+                order.save()
+        elif action == 'CANCEL':
+            if ( order.status == OrderStatus.ASSIGNED or order.status == OrderStatus.IN_PROGRESS) and order.driver == drv:
+                order.status = OrderStatus.UNASSIGNED
+                order.driver = None
+                order.save()
+        elif action == 'START':
+            usr: User=request.user
+            drv = DriverUser.objects.get(user=usr)
+            if order.status == OrderStatus.ASSIGNED and order.driver == drv:
+                order.status = OrderStatus.IN_PROGRESS
+                order.save()
+    context = {
+        'google_api_key':settings.GOOGLE_API_KEY,
+        'order': order,
+        'order_status_label': OrderStatus(order.status).label,
+        }
+    return render(request, 'main_app/driver_order.html', context=context)
 
