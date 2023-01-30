@@ -71,7 +71,7 @@ class Migration(migrations.Migration):
                 ('destination_lon', models.CharField(max_length=20)),
                 ('price', models.FloatField(default=0)),
                 ('is_rated', models.BooleanField(default=False)),
-                ('status', models.IntegerField(choices=[(0, 'Unassigned'), (1, 'Assigned'), (2, 'In Progress'), (3, 'Completed')], default=0)),
+                ('status', models.IntegerField(choices=[(0, 'Unassigned'), (1, 'Assigned'), (2, 'In Progress'), (3, 'Completed'), (4, 'New')], default=4)),
                 ('driver', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.SET_DEFAULT, to='the_matrix.driveruser')),
                 ('passenger', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.SET_DEFAULT, to='the_matrix.passengeruser')),
             ],

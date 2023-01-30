@@ -26,6 +26,7 @@ class OrderStatus(models.IntegerChoices):
     ASSIGNED = 1, 'Assigned'
     IN_PROGRESS = 2, 'In Progress'
     COMPLETED = 3, 'Completed'
+    NEW_ORDER = 4, 'New'
 
 class Order(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -37,4 +38,4 @@ class Order(models.Model):
     driver = models.ForeignKey(DriverUser, on_delete=models.SET_DEFAULT, default=None, null=True)
     price = models.FloatField(default=0)
     is_rated = models.BooleanField(default=False)
-    status = models.IntegerField(choices=OrderStatus.choices, default=OrderStatus.UNASSIGNED)
+    status = models.IntegerField(choices=OrderStatus.choices, default=OrderStatus.NEW_ORDER)

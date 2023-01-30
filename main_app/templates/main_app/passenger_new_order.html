@@ -9,34 +9,44 @@
     </style>
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
     <script src="{% static '/js/maps.js' %}" ></script>
-    <script type ='text/javascript'>setup({{ order.start_location_lat }}, {{ order.start_location_lon }}, {{ order.destination_lat }}, {{ order.destination_lon }})</script>
+    {% if order %}
+    <script type ='text/javascript'>
+        setup( {{ order.start_location_lat }}, {{ order.start_location_lon }}, {{ order.destination_lat }}, {{ order.destination_lon }} );
+    </script>
+    {% endif %}
     <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&callback=initMap"></script>
 {% endblock %}
 
 {% block content %}
 <section class="container">
+    {% if form %}
+    <h1 class="text-center m-4 fw-light">New order</h1>
+    <form action="/passenger_start_order/" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit">
+    </form>
+    {% else %}
     <h1 class="text-center m-4 fw-light">Order Details</h1>
-    <p class="text-center"> <strong>Start Location:</strong> {{ order.start_location_lat }}, {{ order.start_location_lon }}</p>
-    <p class="text-center"> <strong>Destination:</strong> {{ order.destination_lat }}, {{ order.destination_lon }}</p>
+    <p class="text-center"> <strong>Start Location:</strong> ({{ order.start_location_lat }}, {{ order.start_location_lon }})</p>
+    <p class="text-center"> <strong>Destination:</strong> ({{ order.destination_lat }}, {{ order.destination_lon }})</p>
     <p class="text-center"> <strong>Price:</strong> {{ order.price }}</p>
-    <p class="text-center"> <strong>Passenger Name:</strong> {{ order.passenger.user.username }}</p>
+    <p class="text-center"> <strong>Driver Name:</strong> {{ order.driver.user.username }}</p>
     <p class="text-center"> <strong>Order status:</strong> {{ order_status_label }}</p>
-    {% if order.driver %}
-    <p class="text-center"> <strong>Assigned on:</strong> {{ order.driver.user.username }}</p>
-    {% endif %}
     <form action="" method="POST">
         {% csrf_token %}
         {% if order.status == 0 %}
-        <button name = 'button' type ='submit' value="ASSIGN"> Assign </button>
+        <button name = 'button' type ='submit' value="CANCEL"> Cancel </button>
         {% endif %}
         {% if order.status == 1 %}
         <button name = 'button' type ='submit' value="CANCEL"> Cancel </button>
-        <button name = 'button' type ='submit' value="START"> Start </button>
         {% endif %}
         {% if order.status == 2 %}
         <button name = 'button' type ='submit' value="CANCEL"> Cancel </button>
+        <button name = 'button' type ='submit' value="COMPLETE"> Complete </button>
         {% endif %}
     </form> 
+    {% endif %}
 </section>
 <section class="container">
     <h1 class="text-center m-4 fw-light">Map</h1>
