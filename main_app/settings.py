@@ -23,6 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-!=t(fz@z8@c7ysvsm@e&&eefnpa01z3$fd4qpne@d-!3j^&r_q'
 
+GOOGLE_API_KEY = 'ENTER API KEY'
+BASE_COUNTRY = 'SK'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -32,6 +35,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +47,9 @@ INSTALLED_APPS = [
     'bootstrap5',
     'crispy_forms',
     'crispy_bootstrap5',
+    'googlemaps',
+    'channels',
+    'chat',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
@@ -77,8 +84,14 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'main_app.wsgi.application'
+# WSGI_APPLICATION = 'main_app.wsgi.application'
+ASGI_APPLICATION = 'main_app.asgi.application'
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer'
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases

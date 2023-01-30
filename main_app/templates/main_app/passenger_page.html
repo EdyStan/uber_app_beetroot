@@ -147,7 +147,7 @@
                 <h3 class="fs-2">Place an order</h3>
                 <p>Ready for a new trip?</p>
                 <p>Choose what suits you best!</p>
-                <a href="#" class="icon-link d-inline-flex align-items-center">
+                <a href="{% url 'passenger_new_order' %}" class="icon-link d-inline-flex align-items-center">
                     Call to action
                     <svg class="bi" width="1em" height="1em">
                         <use href="#chevron-right"></use>
@@ -258,10 +258,10 @@
                         <use href="#chat-quote-fill"></use>
                     </svg>
                 </div>
-                <h3 class="fs-2">Open Help Desk</h3>
+                <h3 class="fs-2">Open ChatRooms</h3>
                 <p>Do you have any question for the app's administrators?</p>
                 <p>You're just a click away to talking to them!</p>
-                <a href="#" class="icon-link d-inline-flex align-items-center">
+                <a href="{% url 'rooms' %}" class="icon-link d-inline-flex align-items-center">
                     Call to action
                     <svg class="bi" width="1em" height="1em">
                         <use href="#chevron-right"></use>

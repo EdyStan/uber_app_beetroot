@@ -81,10 +81,10 @@
                         {% for order in assigned_orders %}
                         <tr>
                             <td>{{ order.id }}</td>
-                            <td>{{ order.start_location }}</td>
-                            <td>{{ order.destination }}</td>
+                            <td>{{ order.start_location_lat }}, {{ order.start_location_lon }}</td>
+                            <td>{{ order.destination_lat }}, {{ order.destination_lon }}</td>
                             <td>{{ order.price }}</td>
-                            <td><a href="/order/{{ order.id }}/">Start</a></td>
+                            <td><a href="/driver_order/{{ order.id }}/">Start</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -110,10 +110,10 @@
                         {% for order in available_orders_list %}
                         <tr>
                             <td>{{ order.id }}</td>
-                            <td>{{ order.start_location }}</td>
-                            <td>{{ order.destination }}</td>
+                            <td>{{ order.start_location_lat }}, {{ order.start_location_lon }}</td>
+                            <td>{{ order.destination_lat }}, {{ order.destination_lon }}</td>
                             <td>{{ order.price }}</td>
-                            <td><a href="/order/{{ order.id }}/">Assign</a></td>
+                            <td><a href="/driver_order/{{ order.id }}/">Assign</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -139,10 +139,10 @@
                         {% for order in executed_orders %}
                         <tr>
                             <td>{{ order.id }}</td>
-                            <td>{{ order.start_location }}</td>
-                            <td>{{ order.destination }}</td>
+                            <td>{{ order.start_location_lat }}, {{ order.start_location_lon }}</td>
+                            <td>{{ order.destination_lat }}, {{ order.destination_lon }}</td>
                             <td>{{ order.price }}</td>
-                            <td><a href="/order/{{ order.id }}/">Assign</a></td>
+                            <td><a href="/driver_order/{{ order.id }}/">Assign</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>

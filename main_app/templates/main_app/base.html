@@ -6,17 +6,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="{% static 'scss/colors.scss' %}">
     <link rel="stylesheet" href="{% static 'css/carousel.css' %}">
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
-    {% bootstrap_messages %}
+{#    {% bootstrap_messages %}#}
 
     {% block head %}
     {% endblock %}
 
     <style>
+
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+        }
 
         .alert {
             margin-top: 50px;
@@ -39,6 +43,7 @@
         }
 
         .nav-scroller .nav {
+            position: absolute;
             display: flex;
             flex-wrap: nowrap;
             padding-bottom: 1rem;
@@ -73,7 +78,7 @@
                             </li>
                         {% endif %}
                         <li class="nav-item">
-                            <a class="nav-link">Help Desk</a>
+                            <a class="nav-link" href="{% url 'rooms' %}">ChatRooms</a>
                         </li>
 
                         <li class="nav-item">
@@ -93,6 +98,9 @@
     </nav>
 </header>
 {% block content %}
+{% endblock %}
+
+{% block scripts %}
 {% endblock %}
 </body>
 </html>
