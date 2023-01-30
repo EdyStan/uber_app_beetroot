@@ -6,6 +6,15 @@ class User(AbstractUser):
     is_driver = models.BooleanField(default=False)
     is_passenger = models.BooleanField(default=False)
 
+    def save(self, *args, **kwargs):
+        is_new = self.id is None
+        super(User, self).save()
+        if is_new:
+            if self.is_passenger:
+                PassengerUser.objects.create(user=self)
+            elif self.is_driver:
+                DriverUser.objects.create(user=self)
+
 
 class PassengerUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
