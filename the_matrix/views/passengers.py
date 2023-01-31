@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect
 from ..forms import NewPassengerForm, NewOrderForm
 from ..models import User, PassengerUser, Order, OrderStatus
 from ..decorators import passenger_required
+from chat.models import Room
 
 
 class PassengerSignUpView(CreateView):
@@ -95,6 +96,9 @@ def passenger_start_order(request):
             last_order.save()
         elif 'button' in request.POST:
             action = request.POST['button']
+            current_order_room = Room.objects.get(slug=f"{last_order.driver.user.username}_chat_order")
+            current_order_room.user1 = None
+            current_order_room.save()
             if action == 'CANCEL':
                 if last_order.status == OrderStatus.UNASSIGNED and last_order.passenger == passenger:
                     last_order.status = OrderStatus.NEW_ORDER

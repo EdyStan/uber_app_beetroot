@@ -6,6 +6,7 @@ from django.conf import settings
 from ..forms import NewDriverForm
 from ..models import User, Order, DriverUser, OrderStatus
 from ..decorators import driver_required
+from chat.models import Room
 
 
 class DriverSignUpView(CreateView):
@@ -27,6 +28,7 @@ class DriverSignUpView(CreateView):
 def driver_page(request):
     return render(request, 'main_app/driver_page.html', {})
 
+
 @driver_required
 def driver_available_orders(request):
     all_orders = Order.objects.all().filter(driver=None)
@@ -34,6 +36,7 @@ def driver_available_orders(request):
     drv = DriverUser.objects.get(user=usr)
     assigned_orders = Order.objects.filter(driver=drv).filter(status=OrderStatus.ASSIGNED)
     return render(request, 'main_app/driver_orders.html', context={'assigned_orders': assigned_orders, 'available_orders_list': all_orders})
+
 
 @driver_required
 def driver_executed_orders(request):
@@ -50,6 +53,7 @@ def driver_income(request):
     income = drv.amount_of_money
     return render(request, 'main_app/driver_income.html', context={'income': income})
 
+
 @driver_required
 def driver_order(request, order_id):
     order = Order.objects.get(pk=order_id)
@@ -57,16 +61,22 @@ def driver_order(request, order_id):
         action = request.POST['button']
         usr: User=request.user
         drv = DriverUser.objects.get(user=usr)
+        current_order_room = Room.objects.get(slug=f"{usr.username}_chat_order")
+        passenger = order.passenger.user
         if action == 'ASSIGN':
             if order.status == OrderStatus.UNASSIGNED and not order.driver:
                 order.status = OrderStatus.ASSIGNED
                 order.driver = drv
                 order.save()
+                current_order_room.user1 = passenger
+                current_order_room.save()
         elif action == 'CANCEL':
             if ( order.status == OrderStatus.ASSIGNED or order.status == OrderStatus.IN_PROGRESS) and order.driver == drv:
                 order.status = OrderStatus.UNASSIGNED
                 order.driver = None
                 order.save()
+                current_order_room.user1 = None
+                current_order_room.save()
         elif action == 'START':
             usr: User=request.user
             drv = DriverUser.objects.get(user=usr)
