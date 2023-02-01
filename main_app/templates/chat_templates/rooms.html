@@ -46,7 +46,7 @@
                                     <h2 class="mb-5 text-2xl font-semibold" style="font-size: 35px">Passenger {{ room.user1.username }}</h2>
                                 {% endif %}
                             {% endif %}
-                            <a href="{% url 'room' room.slug %}" class="px-5 py-3 block rounded-xl text-black bg-teal-600 hover:bg-teal-700"
+                            <a href="{% url 'room' room.id %}" class="px-5 py-3 block rounded-xl text-black bg-teal-600 hover:bg-teal-700"
                                style="font-size: 25px">Join</a>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
                                     <h2 class="mb-5 text-2xl font-semibold" style="font-size: 35px">Passenger {{ room.user1.username }}</h2>
                                 {% endif %}
                             {% endif %}
-                            <a href="{% url 'room' room.slug %}" class="px-5 py-3 block rounded-xl text-black bg-teal-600 hover:bg-teal-700"
+                            <a href="{% url 'room' room.id %}" class="px-5 py-3 block rounded-xl text-black bg-teal-600 hover:bg-teal-700"
                                style="font-size: 25px">Join</a>
                         </div>
                     </div>

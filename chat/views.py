@@ -19,9 +19,9 @@ def rooms(request):
 
 
 @login_required
-def room(request, slug):
+def room(request, id):
 
-    room = Room.objects.get(slug=slug)
+    room = Room.objects.get(id=id)
     messages = Message.objects.filter(room=room)
 
     if not request.user.is_superuser:

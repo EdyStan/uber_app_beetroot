@@ -241,7 +241,7 @@
 {% endblock %}
 
 {% block scripts %}
-    {{ room.slug|json_script:"json-roomname" }}
+    {{ room.id|json_script:"json-roomname" }}
     {{ request.user.username|json_script:"json-username" }}
 
     <script>

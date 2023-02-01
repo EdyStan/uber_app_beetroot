@@ -97,9 +97,10 @@ def passenger_start_order(request):
         elif 'button' in request.POST:
             action = request.POST['button']
             if last_order.driver is not None:
-                current_order_room = Room.objects.get(slug=f"{last_order.driver.user.username}_chat_order")
-                current_order_room.user1 = None
-                current_order_room.save()
+                if len(Room.objects.filter(user1=last_order.passenger.user, user2=last_order.driver.user)) > 0:
+                    room = Room.objects.get(user1=last_order.passenger.user, user2=last_order.driver.user)
+                    room.is_current = False
+                    room.save()
             if action == 'CANCEL':
                 if last_order.status == OrderStatus.UNASSIGNED and last_order.passenger == passenger:
                     last_order.status = OrderStatus.NEW_ORDER
