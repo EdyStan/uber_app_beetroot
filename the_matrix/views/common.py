@@ -44,7 +44,10 @@ def login_user(request):
             user = authenticate(request, username=username, password=password)
 
             if user is not None:
+
                 login(request, user)
+                if user.is_superuser:
+                    return redirect("rooms")
                 # messages.info(request, f"You are now logged in as {username}.")
                 if user.is_driver:
                     return redirect("driver_page")

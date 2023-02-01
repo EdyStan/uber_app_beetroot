@@ -72,7 +72,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href='{% url 'driver_page' %}'>Menu</a>
                             </li>
-                        {% else %}
+                        {% elif user.is_passenger %}
                             <li class="nav-item">
                                 <a class="nav-link" href='{% url 'passenger_page' %}'>Menu</a>
                             </li>

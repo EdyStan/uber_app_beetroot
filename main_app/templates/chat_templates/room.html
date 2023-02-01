@@ -194,7 +194,17 @@
                             style="border-top-left-radius: 15px; border-top-right-radius: 15px;"
                             id='top_header_chat'>
                         <i class="fas fa-angle-left"></i>
-                        <p class="mb-0 fw-bold">Live chat with {{ room.slug }}</p>
+                        {% if request.user == room.user1 %}
+                            {% if room.user2 != None %}
+                                <p class="mb-0 fw-bold">Live chat with {{ room.user2.username }}</p>
+                            {% else %}
+                                <p class="mb-0 fw-bold">Live chat with admin</p>
+                            {% endif %}
+                        {% else %}
+                            {% if room.user1 != None %}
+                                <p class="mb-0 fw-bold">Live chat with {{ room.user1.username }}</p>
+                            {% endif %}
+                        {% endif %}
                         <i class="fas fa-times"></i>
                     </div>
                     <div class="card-body" id="chat-messages">

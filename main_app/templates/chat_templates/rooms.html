@@ -29,7 +29,23 @@
                     {% if room.user1 is not None %}
                     <div class="lg:w-1/4 px-3 py-3">
                         <div class="p-4 bg-white shadow rounded-xl text-center">
-                            <h2 class="mb-5 text-2xl font-semibold" style="font-size: 35px">{{ room.name }}</h2>
+                            {% if room.user2 == None %}
+                                {% if room.user1 == request.user %}
+                                    <h2 class="mb-5 text-2xl font-semibold" style="font-size: 35px">Help Desk</h2>
+                                {% else %}
+                                    {% if room.user1.is_driver %}
+                                        <h2 class="mb-5 text-2xl font-semibold" style="font-size: 35px">Driver {{ room.user1.username }}</h2>
+                                    {% else %}
+                                        <h2 class="mb-5 text-2xl font-semibold" style="font-size: 35px">Passenger {{ room.user1.username }}</h2>
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                {% if request.user == room.user1 %}
+                                    <h2 class="mb-5 text-2xl font-semibold" style="font-size: 35px">Driver {{ room.user2.username }}</h2>
+                                {% else %}
+                                    <h2 class="mb-5 text-2xl font-semibold" style="font-size: 35px">Passenger {{ room.user1.username }}</h2>
+                                {% endif %}
+                            {% endif %}
                             <a href="{% url 'room' room.slug %}" class="px-5 py-3 block rounded-xl text-black bg-teal-600 hover:bg-teal-700"
                                style="font-size: 25px">Join</a>
                         </div>
@@ -40,7 +56,19 @@
                     {% if room.user1 is not None %}
                     <div class="lg:w-1/4 px-3 py-3">
                         <div class="p-4 bg-white shadow rounded-xl text-center">
-                            <h2 class="mb-5 text-2xl font-semibold" style="font-size: 35px">{{ room.name }}</h2>
+                            {% if room.user2 == None %}
+                                {% if room.user1 == request.user %}
+                                    <h2 class="mb-5 text-2xl font-semibold" style="font-size: 35px">Help Desk</h2>
+                                {% else %}
+                                    <h2 class="mb-5 text-2xl font-semibold" style="font-size: 35px">{{ room.user1.username }}</h2>
+                                {% endif %}
+                            {% else %}
+                                {% if request.user == room.user1 %}
+                                    <h2 class="mb-5 text-2xl font-semibold" style="font-size: 35px">Driver {{ room.user2.username }}</h2>
+                                {% else %}
+                                    <h2 class="mb-5 text-2xl font-semibold" style="font-size: 35px">Passenger {{ room.user1.username }}</h2>
+                                {% endif %}
+                            {% endif %}
                             <a href="{% url 'room' room.slug %}" class="px-5 py-3 block rounded-xl text-black bg-teal-600 hover:bg-teal-700"
                                style="font-size: 25px">Join</a>
                         </div>
