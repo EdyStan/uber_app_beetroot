@@ -1,6 +1,6 @@
 # TheMatrix
 
-This web application was created as final project for Beetroot Academy's "Python Development" Course. It represents a taxi app which allows users to place orders, track their status, chat with both current order's driver and administrators of the company and also rate the drivers that they've interacted with. 
+This web application was created as final project for Beetroot Academy's "Python Development" Course. It represents a taxi app which allows users to place orders, track their status, chat with both current order's driver and administrators of the company and also rate the drivers that they've interacted with. The data for our orders is retrieved from Google Maps using Google APIs.
 
 
 ## Authors
@@ -22,7 +22,7 @@ To continue with the development of this code, one should be up-to-date to all l
 
 The main page of our app displays information about who we are, special offers, reviews from our customers/employees regarding the services and also some nice suprises.
 
-When a new user registers in the application, (s)he can choose his role (will (s)he be a driver, or a passenger?) and (s)he will be redirected to the coresponding register page. After registeration, the page will redirect the user to the login part. 
+When new users registers in the application, they can choose their role (will they be a driver, or a passenger?) and they will be redirected to the coresponding register page. After registeration, the page will redirect the user to the login part. 
 
 Right after logging in, one will be redirected to the special menu designed with a touch of autenticity for driver/passenger, depending the role that was chosen. 
 
