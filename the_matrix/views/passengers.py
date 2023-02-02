@@ -134,7 +134,7 @@ def passenger_start_order(request):
             distance, duration = distance_two_coordinates(lat_s, lon_s, lat_d, lon_d)
             last_order.distance = distance
             price = calculate_price(distance, duration)
-            last_order.price = price
+            last_order.price = float("{:.2f}".format(price))
 
             last_order.status = OrderStatus.UNASSIGNED
             last_order.save()
