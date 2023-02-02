@@ -22,13 +22,12 @@ To continue with the development of this code, one should be up-to-date to all l
 
 The main page of our app displays information about who we are, special offers, reviews from our customers/employees regarding the services and also some nice suprises.
 
-When new users register in the application, they can choose their role (will they be 
- driver or a passengers?) and they will be redirected to the coresponding register page. After registeration, the page will redirect the user to the login part. 
+When new users register in the application, they can choose their role (will they be drivers or passengers?) and they will be redirected to the coresponding register page. After registeration, the page will redirect the user to the login part. 
 
 Right after logging in, one will be redirected to the special menu designed with a touch of autenticity for driver/passenger, depending the role that was chosen. 
 
 The friendly interface for passenger menu functionality hides many backend lines of code, that in principle facilitate the following features: place an order/see status of current order, chat with current driver (if exists), open HelpDesk, rate a driver, change your password, see your balance and even add more money to your account. 
 
-On the other side, when accesing his menu, a driver is capable of: see available orders, assign an order and also start the movement (set the order status to "in progress"). Moreover, he can also see his income (that increases with each finished order), chat with his passengers and with administrators. The possibility of changing the account's password exists here, too.
+On the other side, when accesing his menu, a driver is capable of: seeing available orders, assigning an order and also starting the movement (set the order status to "in progress"). Moreover, he can also see his income (that increases with each finished order), chat with his passengers and with administrators. The possibility of changing the account's password exists here, too.
 
 Have we managed to get your attention? If so, test our app and feel free to give us some advice and suggestions :)
