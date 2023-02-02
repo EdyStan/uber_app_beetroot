@@ -88,7 +88,7 @@ def driver_order(request, order_id):
                 order.status = OrderStatus.IN_PROGRESS
                 order.save()
     context = {
-        'google_api_key':settings.GOOGLE_API_KEY,
+        'google_api_key': settings.GOOGLE_API_KEY,
         'order': order,
         'order_status_label': OrderStatus(order.status).label,
         }

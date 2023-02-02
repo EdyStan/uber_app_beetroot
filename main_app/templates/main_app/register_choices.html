@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
           integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/main_styling.css' %}">
+    <style>
+    .user_card{
+        width: 500px; !important;
+    }
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -31,7 +36,7 @@
 
                 <div class="mt-4">
                     <div class="d-flex justify-content-center links">
-                        <p class="question">Already have an account? <a href="{% url 'login' %}" class="ml-2">
+                        <p class="question">Already have an account? <a href="{% url 'login' %}" class="ml-2" style="color: white">
                             Login </a> instead. </p>
                     </div>
                 </div>

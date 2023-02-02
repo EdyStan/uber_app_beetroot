@@ -45,7 +45,6 @@ class NewPassengerForm(UserCreationForm):
 class NewOrderForm(forms.Form):
     start_location = forms.CharField(label='Start Location', max_length=50, widget=forms.TextInput(attrs={'onfocus': 'select_pin(this)'}))
     end_location = forms.CharField(label='Destination', max_length=50, widget=forms.TextInput(attrs={'onfocus': 'select_pin(this)'}))
-    price = forms.FloatField(label='Price', min_value=5, max_value=300, initial=5)
 
     def startCoordinates(self) -> list:
         coordinate_string = self.data['start_location']
@@ -55,5 +54,6 @@ class NewOrderForm(forms.Form):
         coordinate_string = self.data['end_location']
         return [float(s) for s in coordinate_string.strip()[1:-1].split(", ")]
 
-    def price_value(self) -> float:
-        return self.data['price']
+
+class AddMoneyForm(forms.Form):
+    amount = forms.FloatField()
