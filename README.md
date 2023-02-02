@@ -22,7 +22,8 @@ To continue with the development of this code, one should be up-to-date to all l
 
 The main page of our app displays information about who we are, special offers, reviews from our customers/employees regarding the services and also some nice suprises.
 
-When new users registers in the application, they can choose their role (will they be a driver, or a passenger?) and they will be redirected to the coresponding register page. After registeration, the page will redirect the user to the login part. 
+When new users register in the application, they can choose their role (will they be 
+ driver or a passengers?) and they will be redirected to the coresponding register page. After registeration, the page will redirect the user to the login part. 
 
 Right after logging in, one will be redirected to the special menu designed with a touch of autenticity for driver/passenger, depending the role that was chosen. 
 
