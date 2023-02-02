@@ -30,4 +30,4 @@ The friendly interface for passenger menu functionality hides many backend lines
 
 On the other side, when accesing his menu, a driver is capable of: see available orders, assign an order and also start the movement (set the order status to "in progress"). Moreover, he can also see his income (that increases with each finished order), chat with his passengers and with administrators. The possibility of changing the account's password exists here, too.
 
-Have we managed to get your attention? If so, test our app and feel free to leave us some advice :)
+Have we managed to get your attention? If so, test our app and feel free to give us some advice and suggestions :)
