@@ -4,11 +4,15 @@ from django.views.generic import CreateView
 from django.conf import settings
 from django.db.models import Q
 from django.http import HttpResponseRedirect
+from geopy import GoogleV3
+import googlemaps
+from math import log
 
 from ..forms import NewPassengerForm, NewOrderForm
 from ..models import User, PassengerUser, Order, OrderStatus
 from ..decorators import passenger_required
 from chat.models import Room
+from main_app.settings import GOOGLE_API_KEY
 
 
 class PassengerSignUpView(CreateView):
@@ -71,6 +75,33 @@ def passenger_new_order(request):
         return HttpResponseRedirect('/passenger_start_order/')
 
 
+def calculate_price(distance, duration):
+    print(distance, duration)
+    if distance >= 0:
+        price = distance*duration
+    else:
+        raise ValueError
+    return price
+
+
+def distance_two_coordinates(lat1, lon1, lat2, lon2):
+    origin = (lat1, lon1)
+    destination = (lat2, lon2)
+    gmaps = googlemaps.Client(key=GOOGLE_API_KEY)
+    duration = gmaps.distance_matrix(origin, destination, mode='driving')["rows"][0]["elements"][0]["duration"]["value"]
+    duration_in_hours = duration/3600
+    distance = gmaps.distance_matrix(origin, destination, mode='driving')["rows"][0]["elements"][0]["distance"]["value"]
+    distance_in_km = distance / 1000
+    return distance_in_km, duration_in_hours
+
+
+def destination_or_start_name(lat, lon):
+    geolocator = GoogleV3(GOOGLE_API_KEY)
+    address = geolocator.reverse(str(lat) + "," + str(lon))
+    name = address[0]
+    return name
+
+
 @passenger_required
 def passenger_start_order(request):
     usr: User = request.user
@@ -82,9 +113,9 @@ def passenger_start_order(request):
         return HttpResponseRedirect('/passenger_new_order/')
     if request.method == 'POST':
         form = NewOrderForm(request.POST)
-        print(f"---------!!!!! {form.data}")
+        # print(f"---------!!!!! {form.data}")
         if form.is_valid():  # TODO: Need to validate form data
-            print(f"BOOOOOOM!!!!! {form.data}")
+            # print(f"BOOOOOOM!!!!! {form.data}")
             start_coords = form.startCoordinates()
             end_coords = form.stopCoordinates()
             last_order.price = form.price_value()
@@ -92,6 +123,19 @@ def passenger_start_order(request):
             last_order.destination_lon = end_coords[1]
             last_order.start_location_lat = start_coords[0]
             last_order.start_location_lon = start_coords[1]
+            lat_d = last_order.destination_lat
+            lon_d = last_order.destination_lon
+            lat_s = last_order.start_location_lat
+            lon_s = last_order.start_location_lon
+            destination_name = destination_or_start_name(lat_d, lon_d)
+            last_order.destination_name = destination_name
+            start_name = destination_or_start_name(lat_s, lon_s)
+            last_order.start_name = start_name
+            distance, duration = distance_two_coordinates(lat_s, lon_s, lat_d, lon_d)
+            last_order.distance = distance
+            price = calculate_price(distance, duration)
+            last_order.price = price
+
             last_order.status = OrderStatus.UNASSIGNED
             last_order.save()
         elif 'button' in request.POST:

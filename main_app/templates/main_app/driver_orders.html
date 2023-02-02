@@ -81,8 +81,8 @@
                         {% for order in assigned_orders %}
                         <tr>
                             <td>{{ order.id }}</td>
-                            <td>{{ order.start_location_lat }}, {{ order.start_location_lon }}</td>
-                            <td>{{ order.destination_lat }}, {{ order.destination_lon }}</td>
+                            <td>{{ order.start_name }}</td>
+                            <td>{{ order.destination_name }}</td>
                             <td>{{ order.price }}</td>
                             <td><a href="/driver_order/{{ order.id }}/">Start</a></td>
                         </tr>
@@ -110,8 +110,8 @@
                         {% for order in available_orders_list %}
                         <tr>
                             <td>{{ order.id }}</td>
-                            <td>{{ order.start_location_lat }}, {{ order.start_location_lon }}</td>
-                            <td>{{ order.destination_lat }}, {{ order.destination_lon }}</td>
+                            <td>{{ order.start_name }}</td>
+                            <td>{{ order.destination_name }}</td>
                             <td>{{ order.price }}</td>
                             <td><a href="/driver_order/{{ order.id }}/">Assign</a></td>
                         </tr>
@@ -139,8 +139,8 @@
                         {% for order in executed_orders %}
                         <tr>
                             <td>{{ order.id }}</td>
-                            <td>{{ order.start_location_lat }}, {{ order.start_location_lon }}</td>
-                            <td>{{ order.destination_lat }}, {{ order.destination_lon }}</td>
+                            <td>{{ order.start_name}}</td>
+                            <td>{{ order.destination_name }}</td>
                             <td>{{ order.price }}</td>
                             <td><a href="/driver_order/{{ order.id }}/">Assign</a></td>
                         </tr>

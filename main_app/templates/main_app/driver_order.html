@@ -16,8 +16,8 @@
 {% block content %}
 <section class="container">
     <h1 class="text-center m-4 fw-light">Order Details</h1>
-    <p class="text-center"> <strong>Start Location:</strong> {{ order.start_location_lat }}, {{ order.start_location_lon }}</p>
-    <p class="text-center"> <strong>Destination:</strong> {{ order.destination_lat }}, {{ order.destination_lon }}</p>
+    <p class="text-center"> <strong>Start Location:</strong> {{ order.start_name }}</p>
+    <p class="text-center"> <strong>Destination:</strong> {{ order.destination_name }}</p>
     <p class="text-center"> <strong>Price:</strong> {{ order.price }}</p>
     <p class="text-center"> <strong>Passenger Name:</strong> {{ order.passenger.user.username }}</p>
     <p class="text-center"> <strong>Order status:</strong> {{ order_status_label }}</p>

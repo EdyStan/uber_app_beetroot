@@ -117,14 +117,14 @@ function initMap() {
 }
 
 function placeMarker(location, map) {
-  if ( this.marker == end_marker_id) {
+  if ( this.marker === end_marker_id) {
     if ( this.stopSvgMarker ) {
       this.stopSvgMarker.setPosition(location);
     } else {
       this.stopSvgMarker = addPin(location, map, stopSvgMarkerConfig);
     }
     $("#id_end_location").val(location);
-  } else if ( this.marker == start_marker_id) {
+  } else if ( this.marker === start_marker_id) {
     if ( this.startSvgMarker ) {
       this.startSvgMarker.setPosition(location);
     } else {
