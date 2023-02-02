@@ -71,7 +71,8 @@ def driver_order(request, order_id):
                 current_order_room.user1 = passenger
                 current_order_room.save()
         elif action == 'CANCEL':
-            if ( order.status == OrderStatus.ASSIGNED or order.status == OrderStatus.IN_PROGRESS) and order.driver == drv:
+            if (order.status == OrderStatus.ASSIGNED or order.status == OrderStatus.IN_PROGRESS) \
+                    and order.driver == drv:
                 order.status = OrderStatus.UNASSIGNED
                 order.driver = None
                 order.save()
@@ -84,7 +85,7 @@ def driver_order(request, order_id):
                 order.status = OrderStatus.IN_PROGRESS
                 order.save()
     context = {
-        'google_api_key':settings.GOOGLE_API_KEY,
+        'google_api_key': settings.GOOGLE_API_KEY,
         'order': order,
         'order_status_label': OrderStatus(order.status).label,
         }

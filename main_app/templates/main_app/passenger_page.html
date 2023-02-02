@@ -57,6 +57,10 @@
             white-space: nowrap;
             -webkit-overflow-scrolling: touch;
         }
+
+        .col {
+            padding-bottom: 15px;
+        }
     </style>
 {% endblock %}
 
@@ -128,7 +132,7 @@
     <section class="py-5 text-center container">
         <div class="row py-lg-5">
             <div class="col-lg-6 col-md-8 mx-auto">
-                <h1 class="fw-light">Welcome! We're glad that you're back!</h1>
+                <h1 class="fw-light">Glad that you're back, {{ user.username }}!</h1>
                 <p class="lead text-muted">We are trying to make all our customers happy. See what we've prepared for
                     you!</p>
             </div>
@@ -179,7 +183,7 @@
                 <h3 class="fs-2">See balance </h3>
                 <p>Check your amount of money!</p>
                 <p>Don't worry, only you can see this.</p>
-                <a href="#" class="icon-link d-inline-flex align-items-center">
+                <a href="{% url 'passenger_income' %}" class="icon-link d-inline-flex align-items-center">
                     Call to action
                     <svg class="bi" width="1em" height="1em">
                         <use href="#chevron-right"></use>
@@ -195,7 +199,7 @@
                 <h3 class="fs-2">Add money</h3>
                 <p>If you want to increase your balance..</p>
                 <p>It's only a click away!</p>
-                <a href="#" class="icon-link d-inline-flex align-items-center">
+                <a href="{% url 'passenger_add_money' %}" class="icon-link d-inline-flex align-items-center">
                     Call to action
                     <svg class="bi" width="1em" height="1em">
                         <use href="#chevron-right"></use>
@@ -211,7 +215,7 @@
                 <h3 class="fs-2">View old orders</h3>
                 <p>If you'd like to remember your old trips..</p>
                 <p>Here's the place!</p>
-                <a href="#" class="icon-link d-inline-flex align-items-center">
+                <a href="{% url 'passenger_executed_orders' %}" class="icon-link d-inline-flex align-items-center">
                     Call to action
                     <svg class="bi" width="1em" height="1em">
                         <use href="#chevron-right"></use>
@@ -234,8 +238,7 @@
                     </svg>
                 </a>
             </div>
-        </div>
-        <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+
             <div class="feature col">
                 <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
                     <svg class="bi" width="1em" height="1em">

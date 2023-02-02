@@ -57,3 +57,7 @@ class NewOrderForm(forms.Form):
 
     def price_value(self) -> float:
         return self.data['price']
+
+
+class AddMoneyForm(forms.Form):
+    amount = forms.FloatField()
