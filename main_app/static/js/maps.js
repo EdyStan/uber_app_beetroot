@@ -37,7 +37,7 @@ function setup(start_lat, start_lon, end_lat, end_lon) {
 }
 
 function initMap() {
-    const myLatLng = { lat: ((this.start_lat || 0.0)+(this.end_lat||0.0))/2.0, lng: ((this.start_lon||0.0)+(this.end_lon||0.0))/2.0 };
+    const myLatLng = { lat: 44.432642242882416, lng: 26.10316865576961 };
     var bounds = new google.maps.LatLngBounds();
     console.log(myLatLng.lat, myLatLng.lng);
 
@@ -75,7 +75,7 @@ function initMap() {
     const map = new google.maps.Map(document.getElementById("map"), {
       zoom: 12,
       center: myLatLng,
-    });
+    });  // there, we can specify the centering
     console.log("ADD PINS");
 
     this.startSvgMarkerConfig = {
