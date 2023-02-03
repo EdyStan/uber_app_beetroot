@@ -153,11 +153,12 @@ def passenger_start_order(request):
                     room.save()
             if action == 'CANCEL':
                 if last_order.status == OrderStatus.UNASSIGNED and last_order.passenger == passenger:
-                    last_order.status = OrderStatus.NEW_ORDER
-                    last_order.driver = None
-                    last_order.save()
+                    last_order.delete()
+                    # last_order.status = OrderStatus.NEW_ORDER
+                    # last_order.driver = None
+                    # last_order.save()
                 if last_order.status == OrderStatus.ASSIGNED and last_order.passenger == passenger:
-                    last_order.status = OrderStatus.NEW_ORDER
+                    last_order.status = OrderStatus.COMPLETED
                     need_to_pay = last_order.price * 0.5
                     last_order.driver.amount_of_money += need_to_pay
                     last_order.passenger.amount_of_money -= need_to_pay

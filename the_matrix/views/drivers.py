@@ -35,11 +35,8 @@ def driver_page(request):
 
 @driver_required
 def driver_available_orders(request):
-    all_orders = Order.objects.all().filter(driver=None)
-    usr: User=request.user
-    drv = DriverUser.objects.get(user=usr)
-    assigned_orders = Order.objects.filter(driver=drv).filter(status=OrderStatus.ASSIGNED)
-    return render(request, 'main_app/driver_orders.html', context={'assigned_orders': assigned_orders, 'available_orders_list': all_orders})
+    unassigned_orders = Order.objects.filter(status=OrderStatus.UNASSIGNED)
+    return render(request, 'main_app/driver_orders.html', context={'unassigned_orders': unassigned_orders})
 
 
 @driver_required
