@@ -26,7 +26,11 @@ class DriverSignUpView(CreateView):
 
 @driver_required
 def driver_page(request):
-    return render(request, 'main_app/driver_page.html', {})
+    usr: User = request.user
+    driver = DriverUser.objects.get(user=usr)
+    driver_orders = Order.objects.filter(driver=driver).all()
+    last_order = driver_orders.last()
+    return render(request, 'main_app/driver_page.html', context={'order': last_order})
 
 
 @driver_required

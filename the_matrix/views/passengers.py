@@ -33,7 +33,11 @@ class PassengerSignUpView(CreateView):
 
 @passenger_required
 def passenger_page(request):
-    return render(request, 'main_app/passenger_page.html', {})
+    usr: User = request.user
+    passenger = PassengerUser.objects.get(user=usr)
+    passenger_orders = Order.objects.filter(passenger=passenger).all()
+    last_order = passenger_orders.last()
+    return render(request, 'main_app/passenger_page.html', context={'order': last_order})
 
 
 # @passenger_required

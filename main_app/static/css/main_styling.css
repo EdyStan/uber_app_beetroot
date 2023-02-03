@@ -3,7 +3,7 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            background-image: linear-gradient(to bottom right, black, #343a40, slateblue);
+            background-image: linear-gradient(to right, black, #343a40, slateblue);
         }
 
         .user_card {
