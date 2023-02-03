@@ -133,10 +133,13 @@ def passenger_start_order(request):
             distance, duration = distance_two_coordinates(lat_s, lon_s, lat_d, lon_d)
             last_order.distance = distance
             price = calculate_price(distance, duration)
-            last_order.price = float("{:.2f}".format(price))
-
-            last_order.status = OrderStatus.UNASSIGNED
-            last_order.save()
+            if price > last_order.passenger.amount_of_money:
+                messages.error(request, 'You did not have enough money to place that order!')
+                return redirect('passenger_add_money')
+            else:
+                last_order.price = float("{:.2f}".format(price))
+                last_order.status = OrderStatus.UNASSIGNED
+                last_order.save()
         elif 'button' in request.POST:
             action = request.POST['button']
             if last_order.driver is not None:
