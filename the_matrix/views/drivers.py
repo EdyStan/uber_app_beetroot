@@ -62,11 +62,13 @@ def driver_order(request, order_id):
         action = request.POST['button']
         usr: User=request.user
         drv = DriverUser.objects.get(user=usr)
+        print(f"ACT: {action}")
         if action == 'ASSIGN':
             if order.status == OrderStatus.UNASSIGNED and not order.driver:
                 order.status = OrderStatus.ASSIGNED
                 order.driver = drv
                 order.save()
+                print(f"Order OK")
                 if len(Room.objects.filter(user1=order.passenger.user, user2=order.driver.user)) > 0:
                     room = Room.objects.get(user1=order.passenger.user, user2=order.driver.user)
                     room.is_current = True

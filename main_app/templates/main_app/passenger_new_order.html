@@ -16,11 +16,11 @@
             width: 90%;
             color: white;
         }
+        .rateCard{
+            background: #343a40;
+        }
         .rate{
-
-            border-bottom-right-radius: 12px;
-            border-bottom-left-radius: 12px;
-        
+            background: #343a40;
         }
         
         .rating {
@@ -115,20 +115,17 @@
                                     <div class="d-flex justify-content-center mt-3 login_container">
                                     <button name='button' class="btn login_btn" type='submit' value="CANCEL"> Cancel</button>
                                     </div>
-                                {% endif %}
-                                {% if order.status == 1 %}
+                                {% elif order.status == 1 %}
                                     <div class="d-flex justify-content-center mt-3 login_container">
                                     <button name='button' class="btn login_btn" type='submit' value="CANCEL"> Cancel</button>
                                     </div>
-                                {% endif %}
-                                {% if order.status == 2 %}
+                                {% elif order.status == 2 %}
                                     <div class="d-flex justify-content-center mt-3 login_container">
                                     <button name='button' class="btn login_btn" type='submit' value="CANCEL"> Cancel</button>
                                     </div>
                                     <div class="d-flex justify-content-center mt-3 login_container">
                                     <button name='button' class="btn login_btn" type='submit' value="COMPLETE"> Complete</button>
                                     </div>
-                                {% endif %}
                                 {% elif order.status == 3 %}
                                     {% if order.is_rated %}
                                         <button type="button" class="btn btn-secondary">Rate the driver</button>
@@ -141,7 +138,7 @@
                     </div>
                     <div class="modal fade" id="ratePopup" tabindex="-1" aria-labelledby="ratePopupTitle" aria-hidden="true" style="display: none;">
                         <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
+                          <div class="modal-content rateCard">
                             <form class="text-center" action="/passenger_rate/" method="post">
                                 {% csrf_token %}
                                 <div class="modal-header">
@@ -149,7 +146,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <p>{{order.driver.user.username}} ({{order.driver.rating}} X {{order.driver.number_of_ratings}})</p>
+                                    <p>{{order.driver.user.username}} ({{order.driver.rating}} / {{order.driver.number_of_ratings}})</p>
                                     <p>Please rate your driver below</p>
                                 </div>
                                 <div class="rate py-3 mt-3">
@@ -167,29 +164,6 @@
                                 <input type="submit" class="btn btn-primary" value="Rate">
                                 </div>
                             </form>
-                          </div>
-                        </div>
-                      </div>
-                    
-                      <div class="modal fade" id="ratePopup" tabindex="-1" aria-labelledby="ratePopupTitle" aria-hidden="true" style="display: none;">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="ratePopupTitle">Thanks</h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                              <p>Thanks for your order. Please rate your driver</p>
-                            </div>
-                            <div class="rate bg-success py-3 text-white mt-3">
-                                <h6 class="mb-0">Rate your driver</h6>
-                                <div class="rating"> <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label> <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label> <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label> <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label> <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                              <button type="button" class="btn btn-primary">Save changes</button>
-                            </div>
                           </div>
                         </div>
                       </div>
