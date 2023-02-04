@@ -6,17 +6,63 @@
     <link rel="stylesheet" href="{% static 'css/features.css' %}">
     <style>
         #map {height:500px;width: 100%;}
+        .rate{
+
+            border-bottom-right-radius: 12px;
+            border-bottom-left-radius: 12px;
+        
+        }
+        
+        .rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center
+        }
+        
+        .rating>input {
+            display: none
+        }
+        
+        .rating>label {
+            position: relative;
+            width: 1em;
+            font-size: 30px;
+            font-weight: 300;
+            color: #FF6000;
+            cursor: pointer
+        }
+        
+        .rating>label::before {
+            content: "\2605";
+            position: absolute;
+            opacity: 0
+        }
+        
+        .rating>label:hover:before,
+        .rating>label:hover~label:before {
+            opacity: 1 !important
+        }
+        
+        .rating>input:checked~label:before {
+            opacity: 1
+        }
+        
+        .rating:hover>input:checked~label:before {
+            opacity: 0.4
+        }        
     </style>
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
     <script src="{% static '/js/maps.js' %}" ></script>
     {% if order %}
     <script type ='text/javascript'>
         {% if order.start_location_lat and order.start_location_lon and order.destination_lat and order.destination_lon %}
-        setup( {{ order.start_location_lat }}, {{ order.start_location_lon }}, {{ order.destination_lat }}, {{ order.destination_lon}} );
+        setup( {{ order.start_location_lat }}, {{ order.start_location_lon }}, {{ order.destination_lat }}, {{ order.destination_lon}}, true);
         {% elif order.start_location_lat and order.start_location_lon %}
-        setup( {{ order.start_location_lat }}, {{ order.start_location_lon }}, null, null );
+        setup( {{ order.start_location_lat }}, {{ order.start_location_lon }}, null, null, true);
         {% elif order.destination_lat and order.destination_lon %}
-        setup( null, null, {{ order.destination_lat }}, {{ order.destination_lon}} );
+        setup( null, null, {{ order.destination_lat }}, {{ order.destination_lon}}, true);
+        {% else %}
+        setup( null, null, null, null, true);
         {% endif %}
     </script>
     {% endif %}
@@ -27,33 +73,93 @@
 <section class="container">
     {% if form %}
     <h1 class="text-center m-4 fw-light">New order</h1>
-    <form action="/passenger_start_order/" method="post">
+    <form class="text-center" action="/passenger_start_order/" method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Submit">
+        <input type="submit" class="btn btn-primary" value="Start!">
     </form>
     {% else %}
     <h1 class="text-center m-4 fw-light">Order Details</h1>
     <p class="text-center"> <strong>Start Location:</strong> ({{ order.start_location_lat }}, {{ order.start_location_lon }})</p>
     <p class="text-center"> <strong>Destination:</strong> ({{ order.destination_lat }}, {{ order.destination_lon }})</p>
     <p class="text-center"> <strong>Price:</strong> {{ order.price }}</p>
+    {% if order.driver %}
     <p class="text-center"> <strong>Driver Name:</strong> {{ order.driver.user.username }}</p>
+    {% endif %}
     <p class="text-center"> <strong>Order status:</strong> {{ order_status_label }}</p>
-    <form action="" method="POST">
+    <form class="text-center" action="" method="POST">
         {% csrf_token %}
         {% if order.status == 0 %}
-        <button name = 'button' type ='submit' value="CANCEL"> Cancel </button>
-        {% endif %}
-        {% if order.status == 1 %}
-        <button name = 'button' type ='submit' value="CANCEL"> Cancel </button>
-        {% endif %}
-        {% if order.status == 2 %}
-        <button name = 'button' type ='submit' value="CANCEL"> Cancel </button>
-        <button name = 'button' type ='submit' value="COMPLETE"> Complete </button>
+        <button name = 'button' type="submit" class="btn btn-primary" value="CANCEL"> Cancel </button>
+        {% elif order.status == 1 %}
+        <button name = 'button' type="submit" class="btn btn-primary" value="CANCEL"> Cancel </button>
+        {% elif order.status == 2 %}
+        <button name = 'button' type ='submit' class="btn btn-primary" value="CANCEL"> Cancel </button>
+        <button name = 'button' type ='submit' class="btn btn-primary" value="COMPLETE"> Complete </button>
+        {% elif order.status == 3 %}
+            {% if order.is_rated %}
+            <button type="button" class="btn btn-secondary">Rate the driver</button>
+            {% else %}
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ratePopup">Rate the driver</button>
+            {% endif %}
         {% endif %}
     </form> 
     {% endif %}
 </section>
+<div class="modal fade" id="ratePopup" tabindex="-1" aria-labelledby="ratePopupTitle" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <form class="text-center" action="/passenger_rate/" method="post">
+            {% csrf_token %}
+            <div class="modal-header">
+            <h5 class="modal-title" id="ratePopupTitle">Thanks for your order</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{order.driver.user.username}} ({{order.driver.rating}} X {{order.driver.number_of_ratings}})</p>
+                <p>Please rate your driver below</p>
+            </div>
+            <div class="rate py-3 mt-3">
+                <div class="rating">
+                    <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
+                    <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
+                    <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
+                    <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
+                    <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+                    <input type="hidden" id="order_id" name="order_id" value={{ order.id }} />
+                </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <input type="submit" class="btn btn-primary" value="Rate">
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="ratePopup" tabindex="-1" aria-labelledby="ratePopupTitle" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ratePopupTitle">Thanks</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Thanks for your order. Please rate your driver</p>
+        </div>
+        <div class="rate bg-success py-3 text-white mt-3">
+            <h6 class="mb-0">Rate your driver</h6>
+            <div class="rating"> <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label> <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label> <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label> <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label> <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 <section class="container">
     <h1 class="text-center m-4 fw-light">Map</h1>
     <div class="pageholder">

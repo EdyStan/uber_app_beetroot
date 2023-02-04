@@ -14,8 +14,11 @@ urlpatterns = [
     path('driver_income/', drivers.driver_income, name='driver_income'),
     path('driver_order/<int:order_id>/', drivers.driver_order, name='driver_order'),
     path('passenger/', passengers.passenger_page, name='passenger_page'),
+    path('passenger_order/<int:order_id>/', passengers.passenger_order, name='passenger_order'),
     path('passenger_new_order/', passengers.passenger_new_order, name='passenger_new_order'),
     path('passenger_start_order/', passengers.passenger_start_order, name='passenger_start_order'),
+    path('passenger_executed_orders/', passengers.passenger_executed_orders, name='passenger_executed_orders'),
+    path('passenger_rate/', passengers.passenger_rate, name='passenger_rate'),
     path("password_change/", common.password_change, name="password_change"),
     # google maps here
     path('geocode/', order_details.geocode, name="geocode"),

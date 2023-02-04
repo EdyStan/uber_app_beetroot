@@ -30,19 +30,6 @@ class PassengerSignUpView(CreateView):
 def passenger_page(request):
     return render(request, 'main_app/passenger_page.html', {})
 
-
-# @passenger_required
-# def passenger_new_order(request):
-#     usr: User=request.user
-#     passenger = PassengerUser.objects.get(user=usr)
-#     available_orders = Order.objects.filter(passenger=passenger).filter(~Q(status=OrderStatus.COMPLETED)) # ~ == NOT. Here we return only active orders for passenger
-#     context = {
-#         'order': available_orders.last,
-#         'google_api_key':settings.GOOGLE_API_KEY
-#         }
-#     return render(request, 'main_app/passenger_new_order.html', context=context)
-
-
 @passenger_required
 def passenger_new_order(request):
     print(request.POST)
@@ -137,3 +124,45 @@ def passenger_start_order(request):
         'google_api_key': settings.GOOGLE_API_KEY
     }
     return render(request, 'main_app/passenger_new_order.html', context=context)
+
+@passenger_required
+def passenger_executed_orders(request):
+    usr: User=request.user
+    pas = PassengerUser.objects.get(user=usr)
+    executed_orders = Order.objects.filter(passenger=pas).filter(status=OrderStatus.COMPLETED)
+    return render(request, 'main_app/passenger_orders.html', context={'executed_orders': executed_orders})
+
+@passenger_required
+def passenger_order(request, order_id):
+    order = Order.objects.get(pk=order_id)
+    usr: User = request.user
+    passenger = PassengerUser.objects.get(user=usr)
+    if passenger != order.passenger: # Passenger can open only his personal orders
+        return HttpResponseRedirect('/passenger/')
+    context = {
+            'order': order,
+            'order_status_label': OrderStatus(order.status).label,
+            'google_api_key': settings.GOOGLE_API_KEY
+        }
+    return render(request, 'main_app/passenger_new_order.html', context=context)
+
+@passenger_required
+def passenger_rate(request):
+    if request.method == 'POST':
+        form = request.POST
+        rate = float(form['rating'])
+        order_id = form['order_id']
+        order = Order.objects.get(pk=order_id)
+        usr: User = request.user
+        passenger = PassengerUser.objects.get(user=usr)
+        if order.passenger == passenger:
+            rating = order.driver.rating or 0.0
+            num = order.driver.number_of_ratings or 0
+            new_rating = ( rating * num + rate ) / ( num + 1 )
+            order.driver.rating = new_rating
+            order.driver.number_of_ratings = num + 1
+            order.driver.save()
+            order.is_rated = True
+            order.save()
+        print(f"---------!!!!! {order_id} : {rate}")
+    return HttpResponseRedirect('/passenger/')

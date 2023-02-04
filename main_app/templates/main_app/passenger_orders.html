@@ -71,9 +71,10 @@
                     <thead>
                         <tr>
                             <th scope="col" style="width: 6.66%">Id</th>
-                            <th scope="col" style="width: 37%">From</th>
-                            <th scope="col" style="width: 37%">To</th>
+                            <th scope="col" style="width: 33%">From</th>
+                            <th scope="col" style="width: 33%">To</th>
                             <th scope="col" style="width: 11%">Price</th>
+                            <th scope="col" style="width: 8%">Rated</th>
                             <th scope="col" style="width: 8.33%">Action</th>
                         </tr>
                     </thead>
@@ -84,7 +85,19 @@
                             <td>{{ order.start_location_lat }}, {{ order.start_location_lon }}</td>
                             <td>{{ order.destination_lat }}, {{ order.destination_lon }}</td>
                             <td>{{ order.price }}</td>
-                            <td><a href="/driver_order/{{ order.id }}/">Details</a></td>
+                            {% if order.status == 4 %}
+                            <td>New</td>
+                            {% elif order.status == 0 %}
+                            <td>Available</td>
+                            {% elif order.status == 1 %}
+                            <td>Assigned</td>
+                            {% elif order.status == 2 %}
+                            <td>In progress</td>
+                            {% elif order.status == 3 %}
+                            <td>Done</td>
+                            {% endif %}
+                            <td>{{ order.price }}</td>
+                            <td><a href="/passenger_order/{{ order.id }}/">Open</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -100,9 +113,10 @@
                     <thead>
                         <tr>
                             <th scope="col" style="width: 6.66%">Id</th>
-                            <th scope="col" style="width: 37%">From</th>
-                            <th scope="col" style="width: 37%">To</th>
+                            <th scope="col" style="width: 33%">From</th>
+                            <th scope="col" style="width: 33%">To</th>
                             <th scope="col" style="width: 11%">Price</th>
+                            <th scope="col" style="width: 8%">Rated</th>
                             <th scope="col" style="width: 8.33%">Action</th>
                         </tr>
                     </thead>
@@ -113,7 +127,8 @@
                             <td>{{ order.start_location_lat }}, {{ order.start_location_lon }}</td>
                             <td>{{ order.destination_lat }}, {{ order.destination_lon }}</td>
                             <td>{{ order.price }}</td>
-                            <td><a href="/driver_order/{{ order.id }}/">Open to Assign</a></td>
+                            <td>New</td>
+                            <td><a href="/passenger_order/{{ order.id }}/">Open</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -129,9 +144,10 @@
                     <thead>
                         <tr>
                             <th scope="col" style="width: 6.66%">Id</th>
-                            <th scope="col" style="width: 37%">From</th>
-                            <th scope="col" style="width: 37%">To</th>
+                            <th scope="col" style="width: 33%">From</th>
+                            <th scope="col" style="width: 33%">To</th>
                             <th scope="col" style="width: 11%">Price</th>
+                            <th scope="col" style="width: 8%">Rated</th>
                             <th scope="col" style="width: 8.33%">Action</th>
                         </tr>
                     </thead>
@@ -142,7 +158,12 @@
                             <td>{{ order.start_location_lat }}, {{ order.start_location_lon }}</td>
                             <td>{{ order.destination_lat }}, {{ order.destination_lon }}</td>
                             <td>{{ order.price }}</td>
-                            <td><a href="/driver_order/{{ order.id }}/">Details</a></td>
+                            {% if order.is_rated %}
+                            <td>★</td>
+                            {% else %}
+                            <td>☆</td>
+                            {% endif %}
+                            <td><a href="/passenger_order/{{ order.id }}/">Open</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
