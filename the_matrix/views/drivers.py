@@ -26,16 +26,17 @@ class DriverSignUpView(CreateView):
 
 @driver_required
 def driver_page(request):
-    return render(request, 'main_app/driver_page.html', {})
+    usr: User = request.user
+    driver = DriverUser.objects.get(user=usr)
+    driver_orders = Order.objects.filter(driver=driver).all()
+    last_order = driver_orders.last()
+    return render(request, 'main_app/driver_page.html', context={'order': last_order})
 
 
 @driver_required
 def driver_available_orders(request):
-    all_orders = Order.objects.all().filter(driver=None)
-    usr: User=request.user
-    drv = DriverUser.objects.get(user=usr)
-    assigned_orders = Order.objects.filter(driver=drv).filter(status=OrderStatus.ASSIGNED)
-    return render(request, 'main_app/driver_orders.html', context={'assigned_orders': assigned_orders, 'available_orders_list': all_orders})
+    unassigned_orders = Order.objects.filter(status=OrderStatus.UNASSIGNED)
+    return render(request, 'main_app/driver_orders.html', context={'unassigned_orders': unassigned_orders})
 
 
 @driver_required
@@ -61,22 +62,28 @@ def driver_order(request, order_id):
         action = request.POST['button']
         usr: User=request.user
         drv = DriverUser.objects.get(user=usr)
-        current_order_room = Room.objects.get(slug=f"{usr.username}_chat_order")
-        passenger = order.passenger.user
+        print(f"ACT: {action}")
         if action == 'ASSIGN':
             if order.status == OrderStatus.UNASSIGNED and not order.driver:
                 order.status = OrderStatus.ASSIGNED
                 order.driver = drv
                 order.save()
-                current_order_room.user1 = passenger
-                current_order_room.save()
+                print(f"Order OK")
+                if len(Room.objects.filter(user1=order.passenger.user, user2=order.driver.user)) > 0:
+                    room = Room.objects.get(user1=order.passenger.user, user2=order.driver.user)
+                    room.is_current = True
+                    room.save()
+                else:
+                    Room.objects.create(user1=order.passenger.user, user2=order.driver.user, is_current=True)
+
         elif action == 'CANCEL':
-            if ( order.status == OrderStatus.ASSIGNED or order.status == OrderStatus.IN_PROGRESS) and order.driver == drv:
+            if (order.status == OrderStatus.ASSIGNED or order.status == OrderStatus.IN_PROGRESS) and order.driver == drv:
+                room = Room.objects.get(user1=order.passenger.user, user2=order.driver.user)
                 order.status = OrderStatus.UNASSIGNED
                 order.driver = None
                 order.save()
-                current_order_room.user1 = None
-                current_order_room.save()
+                room.is_current = False
+                room.save()
         elif action == 'START':
             usr: User=request.user
             drv = DriverUser.objects.get(user=usr)
@@ -84,7 +91,7 @@ def driver_order(request, order_id):
                 order.status = OrderStatus.IN_PROGRESS
                 order.save()
     context = {
-        'google_api_key':settings.GOOGLE_API_KEY,
+        'google_api_key': settings.GOOGLE_API_KEY,
         'order': order,
         'order_status_label': OrderStatus(order.status).label,
         }
