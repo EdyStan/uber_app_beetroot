@@ -23,8 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-!=t(fz@z8@c7ysvsm@e&&eefnpa01z3$fd4qpne@d-!3j^&r_q'
 
-GOOGLE_API_KEY = ''
-
+GOOGLE_API_KEY = "AIzaSyDTRKJXmD5P7iJA-v2vQDzoCpeDJLpxslM"
 BASE_COUNTRY = 'SK'
 
 # SECURITY WARNING: don't run with debug turned on in production!

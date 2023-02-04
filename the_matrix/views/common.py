@@ -74,6 +74,8 @@ def password_change(request):
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             messages.success(request, 'Your password was successfully updated!')
+            if user.is_superuser:
+                return redirect('rooms')
             if user.is_driver:
                 return redirect('driver_page')
             elif user.is_passenger:

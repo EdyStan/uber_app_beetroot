@@ -19,9 +19,9 @@ class NewDriverForm(UserCreationForm):
         user.email = email
         user.is_driver = True
         user.save()
-        Room.objects.create(name=f"Current Order", slug=f"{user.username}_chat_order", user1=None, user2=user)
+        # Room.objects.create(name=f"Current Order", slug=f"{user.username}_chat_order", user1=None, user2=user)
         # when an order is created, user1 will be the passenger. I made rooms.html not show rooms with user1=None
-        Room.objects.create(name=f"Driver {user.username} - Help Desk", slug=f"{user.username}-Help_Desk", user1=user, user2=None)
+        Room.objects.create(user1=user, user2=None)
         return user
 
 
@@ -38,14 +38,13 @@ class NewPassengerForm(UserCreationForm):
         user.email = email
         user.is_passenger = True
         user.save()
-        Room.objects.create(name=f"Passenger {user.username} - Help Desk", slug=f"{user.username}-Help_Desk", user1=user, user2=None)
+        Room.objects.create(user1=user, user2=None)
         return user
 
 
 class NewOrderForm(forms.Form):
     start_location = forms.CharField(label='Start Location', max_length=50, widget=forms.TextInput(attrs={'onfocus': 'select_pin(this)'}))
     end_location = forms.CharField(label='Destination', max_length=50, widget=forms.TextInput(attrs={'onfocus': 'select_pin(this)'}))
-    price = forms.FloatField(label='Price', min_value=5, max_value=300, initial=5)
 
     def startCoordinates(self) -> list:
         coordinate_string = self.data['start_location']
@@ -55,5 +54,6 @@ class NewOrderForm(forms.Form):
         coordinate_string = self.data['end_location']
         return [float(s) for s in coordinate_string.strip()[1:-1].split(", ")]
 
-    def price_value(self) -> float:
-        return self.data['price']
+
+class AddMoneyForm(forms.Form):
+    amount = forms.FloatField()

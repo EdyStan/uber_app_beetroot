@@ -8,13 +8,6 @@
         svg {
             color: slateblue;
         }
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;
-        }
 
         @media (min-width: 768px) {
             .bd-placeholder-img-lg {
@@ -22,30 +15,9 @@
             }
         }
 
-        .b-example-divider {
-            height: 3rem;
-            background-color: rgba(0, 0, 0, .1);
-            border: solid rgba(0, 0, 0, .15);
-            border-width: 1px 0;
-            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-        }
-
-        .b-example-vr {
-            flex-shrink: 0;
-            width: 1.5rem;
-            height: 100vh;
-        }
-
         .bi {
             vertical-align: -.125em;
             fill: currentColor;
-        }
-
-        .nav-scroller {
-            position: relative;
-            z-index: 2;
-            height: 2.75rem;
-            overflow-y: hidden;
         }
 
         .nav-scroller .nav {
@@ -57,6 +29,10 @@
             text-align: center;
             white-space: nowrap;
             -webkit-overflow-scrolling: touch;
+        }
+
+        .col {
+            padding-bottom: 15px;
         }
     </style>
 {% endblock %}
@@ -129,8 +105,9 @@
     <section class="py-5 text-center container">
         <div class="row py-lg-5">
             <div class="col-lg-6 col-md-8 mx-auto">
-                <h1 class="fw-light">Welcome to the menu especially designed for our Drivers! Glad to see you again, {{ user.username }} </h1>
-                <p class="lead text-muted">Choose what you want to do!</p>
+                <h1 class="fw-light">Glad to see you again, {{ user.username }}! </h1>
+                <p class="lead text-muted">Welcome to the menu especially designed for our Drivers! <br/> Choose what
+                    you want to do!</p>
             </div>
         </div>
     </section>
@@ -138,16 +115,51 @@
     <div class="container px-4 py-5" id="featured-3">
         <h2 class="pb-2 border-bottom">A multitude of options...</h2>
         <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+            {% if order and order.status != 3 and order.status != 4 %}
+                <div class="feature col">
+                    <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+                        <svg class="bi" width="1em" height="1em">
+                            <use href="#collection"></use>
+                        </svg>
+                    </div>
+                    <h3 class="fs-2">See current order</h3>
+                    <p>You took a ride?</p>
+                    <p>Check its details right here!</p>
+                    <a href="/driver_order/{{ order.id }}" class="icon-link d-inline-flex align-items-center">
+                        Call to action
+                        <svg class="bi" width="1em" height="1em">
+                            <use href="#chevron-right"></use>
+                        </svg>
+                    </a>
+                </div>
+            {% else %}
+                <div class="feature col">
+                    <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+                        <svg class="bi" width="1em" height="1em">
+                            <use href="#collection"></use>
+                        </svg>
+                    </div>
+                    <h3 class="fs-2">Access available orders</h3>
+                    <p>Ready for a new trip?</p>
+                    <p>Choose what suits you best!</p>
+                    <a href="{% url 'driver_available_orders' %}" class="icon-link d-inline-flex align-items-center">
+                        Call to action
+                        <svg class="bi" width="1em" height="1em">
+                            <use href="#chevron-right"></use>
+                        </svg>
+                    </a>
+                </div>
+            {% endif %}
             <div class="feature col">
                 <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
                     <svg class="bi" width="1em" height="1em">
-                        <use href="#collection"></use>
+                        <use href="#calendar3"></use>
                     </svg>
                 </div>
-                <h3 class="fs-2">Access available orders</h3>
-                <p>Ready for a new trip?</p>
-                <p>Choose what suits you best!</p>
-                <a href="{% url 'driver_available_orders' %}" class="icon-link d-inline-flex align-items-center">
+                <h3 class="fs-2">View executed orders</h3>
+                <p>If you'd like to remember your old trips..</p>
+                <p>Here's the place!</p>
+                <a href="{% url 'driver_executed_orders' %}" class="icon-link d-inline-flex align-items-center">
                     Call to action
                     <svg class="bi" width="1em" height="1em">
                         <use href="#chevron-right"></use>
@@ -173,13 +185,45 @@
             <div class="feature col">
                 <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
                     <svg class="bi" width="1em" height="1em">
-                        <use href="#calendar3"></use>
+                        <use href="#tools"></use>
                     </svg>
                 </div>
-                <h3 class="fs-2">View executed orders</h3>
-                <p>If you'd like to remember your old trips..</p>
-                <p>Here's the place!</p>
-                <a href="{% url 'driver_executed_orders' %}" class="icon-link d-inline-flex align-items-center">
+                <h3 class="fs-2">Change password</h3>
+                <p>We hope you haven't been hacked!</p>
+                <p>You can easily change your password by clicking below!</p>
+                <a href="{% url 'password_change' %}" class="icon-link d-inline-flex align-items-center">
+                    Call to action
+                    <svg class="bi" width="1em" height="1em">
+                        <use href="#chevron-right"></use>
+                    </svg>
+                </a>
+            </div>
+            <div class="feature col">
+                <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+                    <svg class="bi" width="1em" height="1em">
+                        <use href="#chat-quote-fill"></use>
+                    </svg>
+                </div>
+                <h3 class="fs-2">Open ChatRooms</h3>
+                <p>Do you have any question for the app's administrators?</p>
+                <p>You're just a click away to talking to them!</p>
+                <a href="{% url 'rooms' %}" class="icon-link d-inline-flex align-items-center">
+                    Call to action
+                    <svg class="bi" width="1em" height="1em">
+                        <use href="#chevron-right"></use>
+                    </svg>
+                </a>
+            </div>
+            <div class="feature col">
+                <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+                    <svg class="bi" width="1em" height="1em">
+                        <use href="#toggles2"></use>
+                    </svg>
+                </div>
+                <h3 class="fs-2">Go to main page </h3>
+                <p>Press the link to return to the home page.</p>
+                <p>See all the offers, get premium access and much more! </p>
+                <a href="{% url 'home' %}" class="icon-link d-inline-flex align-items-center">
                     Call to action
                     <svg class="bi" width="1em" height="1em">
                         <use href="#chevron-right"></use>
@@ -187,56 +231,6 @@
                 </a>
             </div>
         </div>
-            <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
-                <div class="feature col">
-                    <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
-                        <svg class="bi" width="1em" height="1em">
-                            <use href="#tools"></use>
-                        </svg>
-                    </div>
-                    <h3 class="fs-2">Change password</h3>
-                    <p>We hope you haven't been hacked!</p>
-                    <p>You can easily change your password by clicking below!</p>
-                    <a href="{% url 'password_change' %}" class="icon-link d-inline-flex align-items-center">
-                        Call to action
-                        <svg class="bi" width="1em" height="1em">
-                            <use href="#chevron-right"></use>
-                        </svg>
-                    </a>
-                </div>
-                <div class="feature col">
-                    <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
-                        <svg class="bi" width="1em" height="1em">
-                            <use href="#chat-quote-fill"></use>
-                        </svg>
-                    </div>
-                    <h3 class="fs-2">Open ChatRooms</h3>
-                    <p>Do you have any question for the app's administrators?</p>
-                    <p>You're just a click away to talking to them!</p>
-                    <a href="{% url 'rooms' %}" class="icon-link d-inline-flex align-items-center">
-                        Call to action
-                        <svg class="bi" width="1em" height="1em">
-                            <use href="#chevron-right"></use>
-                        </svg>
-                    </a>
-                </div>
-                <div class="feature col">
-                    <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
-                        <svg class="bi" width="1em" height="1em">
-                            <use href="#toggles2"></use>
-                        </svg>
-                    </div>
-                    <h3 class="fs-2">Go to main page </h3>
-                    <p>Press the link to return to the home page.</p>
-                    <p>See all the offers, get premium access and much more! </p>
-                    <a href="{% url 'home' %}" class="icon-link d-inline-flex align-items-center">
-                        Call to action
-                        <svg class="bi" width="1em" height="1em">
-                            <use href="#chevron-right"></use>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-        </div>
+    </div>
 
 {% endblock %}
