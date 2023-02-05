@@ -105,7 +105,7 @@
                             <p class=""><strong>Destination: </strong>{{ order.destination_name }}</p>
                             <p class=""><strong>Price: </strong> {{ order.price }} $</p>
                             {% if order.driver %}
-                            <p class="text-center"> <strong>Driver Name:</strong> {{ order.driver.user.username }}</p>
+                            <p class=""> <strong>Driver Name:</strong> {{ order.driver.user.username }}</p>
                             {% endif %}
                             <p class=""><strong>Order status:</strong> {{ order_status_label }}</p>
                             </div>
@@ -127,11 +127,13 @@
                                     <button name='button' class="btn login_btn" type='submit' value="COMPLETE"> Complete</button>
                                     </div>
                                 {% elif order.status == 3 %}
+                                    <div class="d-flex justify-content-center mt-3 login_container">
                                     {% if order.is_rated %}
-                                        <button type="button" class="btn btn-secondary">Rate the driver</button>
+                                        <button type="button" class="btn login_btn">Rate the driver</button>
                                     {% else %}
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ratePopup">Rate the driver</button>
+                                        <button type="button" class="btn login_btn" data-bs-toggle="modal" data-bs-target="#ratePopup">Rate the driver</button>
                                     {% endif %}
+                                    </div>
                                 {% endif %}
                             </form>
                         {% endif %}
@@ -146,7 +148,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <p>{{order.driver.user.username}} ({{order.driver.rating}} / {{order.driver.number_of_ratings}})</p>
+                                    <p>{{order.driver.user.username}} ({{order.driver.rating|floatformat:2 }} / {{order.driver.number_of_ratings}})</p>
                                     <p>Please rate your driver below</p>
                                 </div>
                                 <div class="rate py-3 mt-3">

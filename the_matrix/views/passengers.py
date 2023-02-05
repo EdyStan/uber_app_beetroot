@@ -39,6 +39,7 @@ def passenger_page(request):
     last_order = passenger_orders.last()
     return render(request, 'main_app/passenger_page.html', context={'order': last_order})
 
+
 @passenger_required
 def passenger_new_order(request):
     print(request.POST)
@@ -69,7 +70,7 @@ def passenger_new_order(request):
 def calculate_price(distance, duration):
     print(distance, duration)
     if distance >= 0:
-        price = distance*duration
+        price = distance * duration
     else:
         raise ValueError
     return price
@@ -80,7 +81,7 @@ def distance_two_coordinates(lat1, lon1, lat2, lon2):
     destination = (lat2, lon2)
     gmaps = googlemaps.Client(key=GOOGLE_API_KEY)
     duration = gmaps.distance_matrix(origin, destination, mode='driving')["rows"][0]["elements"][0]["duration"]["value"]
-    duration_in_hours = duration/3600
+    duration_in_hours = duration / 3600
     distance = gmaps.distance_matrix(origin, destination, mode='driving')["rows"][0]["elements"][0]["distance"]["value"]
     distance_in_km = distance / 1000
     return distance_in_km, duration_in_hours
@@ -163,7 +164,7 @@ def passenger_start_order(request):
             elif action == 'COMPLETE':
                 if last_order.status == OrderStatus.IN_PROGRESS and last_order.passenger == passenger:
                     last_order.status = OrderStatus.COMPLETED
-                    need_to_pay = last_order.price
+                    need_to_pay = float("{:.2f}".format(last_order.price))
                     last_order.driver.amount_of_money += need_to_pay
                     last_order.passenger.amount_of_money -= need_to_pay
                     last_order.driver.save()
@@ -183,20 +184,20 @@ def passenger_start_order(request):
     return render(request, 'main_app/passenger_new_order.html', context=context)
 
 
-
 @passenger_required
 def passenger_order(request, order_id):
     order = Order.objects.get(pk=order_id)
     usr: User = request.user
     passenger = PassengerUser.objects.get(user=usr)
-    if passenger != order.passenger: # Passenger can open only his personal orders
+    if passenger != order.passenger:  # Passenger can open only his personal orders
         return HttpResponseRedirect('/passenger/')
     context = {
-            'order': order,
-            'order_status_label': OrderStatus(order.status).label,
-            'google_api_key': settings.GOOGLE_API_KEY
-        }
+        'order': order,
+        'order_status_label': OrderStatus(order.status).label,
+        'google_api_key': settings.GOOGLE_API_KEY
+    }
     return render(request, 'main_app/passenger_new_order.html', context=context)
+
 
 @passenger_required
 def passenger_rate(request):
@@ -210,7 +211,7 @@ def passenger_rate(request):
         if order.passenger == passenger:
             rating = order.driver.rating or 0.0
             num = order.driver.number_of_ratings or 0
-            new_rating = ( rating * num + rate ) / ( num + 1 )
+            new_rating = (rating * num + rate) / (num + 1)
             order.driver.rating = new_rating
             order.driver.number_of_ratings = num + 1
             order.driver.save()
@@ -242,7 +243,8 @@ def passenger_add_money(request):
     else:
         form = AddMoneyForm()
         messages.error(request, 'There was a problem while submitting your data! Try again!')
-    return render(request, 'main_app/passenger_add_money.html', {'form': form, 'income': income, 'passenger': passenger})
+    return render(request, 'main_app/passenger_add_money.html',
+                  {'form': form, 'income': income, 'passenger': passenger})
 
 
 @passenger_required
