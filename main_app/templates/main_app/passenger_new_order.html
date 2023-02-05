@@ -128,9 +128,9 @@
                                     </div>
                                 {% elif order.status == 3 %}
                                     <div class="d-flex justify-content-center mt-3 login_container">
-                                    {% if order.is_rated %}
-                                        <button type="button" class="btn login_btn">Rate the driver</button>
-                                    {% else %}
+                                    {% if not order.is_rated %}
+{#                                        <button type="button" class="btn login_btn">Rate the driver</button>#}
+{#                                    {% else %}#}
                                         <button type="button" class="btn login_btn" data-bs-toggle="modal" data-bs-target="#ratePopup">Rate the driver</button>
                                     {% endif %}
                                     </div>

@@ -3,6 +3,7 @@ import json
 from django.conf import settings
 from django.shortcuts import render
 
+
 def geocode(request):
     gmaps = googlemaps.Client(key= settings.GOOGLE_API_KEY)
     result = json.dumps(gmaps.geocode(str('Stadionstraat 5, 4815 NC Breda')))

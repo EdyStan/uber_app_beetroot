@@ -7,7 +7,6 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect
 from geopy import GoogleV3
 import googlemaps
-from math import log
 
 from ..forms import NewPassengerForm, NewOrderForm, AddMoneyForm
 from ..models import User, PassengerUser, Order, OrderStatus
@@ -253,10 +252,3 @@ def passenger_executed_orders(request):
     passenger = PassengerUser.objects.get(user=usr)
     executed_orders = Order.objects.filter(passenger=passenger).filter(status=OrderStatus.COMPLETED)
     return render(request, 'main_app/passenger_old_orders.html', context={'executed_orders': executed_orders})
-
-# @passenger_required
-# def passenger_executed_orders(request):
-#     usr: User=request.user
-#     pas = PassengerUser.objects.get(user=usr)
-#     executed_orders = Order.objects.filter(passenger=pas).filter(status=OrderStatus.COMPLETED)
-#     return render(request, 'main_app/passenger_orders.html', context={'executed_orders': executed_orders})

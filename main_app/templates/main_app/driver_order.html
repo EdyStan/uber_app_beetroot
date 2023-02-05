@@ -32,14 +32,14 @@
                     <div class="justify-content-center" style="margin-left: 30px">
                         <h1 class="text-center m-4 fw-light">Order Details</h1>
                         <p class=""><strong>Start
-                            Location:</strong> {{ order.start_name }}</p>
+                            Location: </strong> {{ order.start_name }}</p>
                         <p class="">
-                            <strong>Destination:</strong> {{ order.destination_name }}</p>
-                        <p class=""><strong>Price:</strong> {{ order.price }} $</p>
-                        <p class=""><strong>Passenger Name:</strong> {{ order.passenger.user.username }}</p>
-                        <p class="t"><strong>Order status:</strong> {{ order_status_label }}</p>
+                            <strong>Destination: </strong> {{ order.destination_name }}</p>
+                        <p class=""><strong>Price: </strong> {{ order.price }} $</p>
+                        <p class=""><strong>Passenger Name: </strong> {{ order.passenger.user.username }}</p>
+                        <p class="t"><strong>Order status: </strong> {{ order_status_label }}</p>
                         {% if order.driver %}
-                            <p class=""><strong>Assigned on:</strong> {{ order.driver.user.username }}</p>
+                            <p class=""><strong>Assigned on: </strong> {{ order.driver.user.username }}</p>
                         {% endif %}
                     </div>
                         <form action="" method="POST">
