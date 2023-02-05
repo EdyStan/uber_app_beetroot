@@ -105,7 +105,7 @@
                             <p class=""><strong>Destination: </strong>{{ order.destination_name }}</p>
                             <p class=""><strong>Price: </strong> {{ order.price }} $</p>
                             {% if order.driver %}
-                            <p class=""> <strong>Driver Name:</strong> {{ order.driver.user.username }}</p>
+                            <p class=""> <strong>Driver Name:</strong> {{ order.driver.user.username }} ({{ order.driver.rating|floatformat:2 }}/ 5 stars)</p>
                             {% endif %}
                             <p class=""><strong>Order status:</strong> {{ order_status_label }}</p>
                             </div>
