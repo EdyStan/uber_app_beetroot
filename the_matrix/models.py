@@ -53,3 +53,12 @@ class Order(models.Model):
     price = models.FloatField(default=0)
     is_rated = models.BooleanField(default=False)
     status = models.IntegerField(choices=OrderStatus.choices, default=OrderStatus.NEW_ORDER)
+
+    def setStatusAndPayPercent(self, status: OrderStatus, percent: int):
+        self.status = status
+        need_to_pay = float("{:.2f}".format(self.price)) * float(percent) / 100.0
+        self.driver.amount_of_money += need_to_pay
+        self.passenger.amount_of_money -= need_to_pay
+        self.driver.save()
+        self.passenger.save()
+        self.save()

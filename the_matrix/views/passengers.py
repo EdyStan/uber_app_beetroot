@@ -104,8 +104,7 @@ def passenger_start_order(request):
         return HttpResponseRedirect('/passenger_new_order/')
     if request.method == 'POST':
         form = NewOrderForm(request.POST)
-        # print(f"---------!!!!! {form.data}")
-        if form.is_valid():  # TODO: Need to validate form data
+        if form.is_valid() and last_order.status == OrderStatus.NEW_ORDER:  # TODO: Need to validate form data; We can put this data only to new order!
             # print(f"BOOOOOOM!!!!! {form.data}")
             start_coords = form.startCoordinates()
             end_coords = form.stopCoordinates()
@@ -141,35 +140,15 @@ def passenger_start_order(request):
             if action == 'CANCEL':
                 if last_order.status == OrderStatus.UNASSIGNED and last_order.passenger == passenger:
                     last_order.delete()
-                    # last_order.status = OrderStatus.NEW_ORDER
-                    # last_order.driver = None
-                    # last_order.save()
                 if last_order.status == OrderStatus.ASSIGNED and last_order.passenger == passenger:
-                    last_order.status = OrderStatus.COMPLETED
-                    need_to_pay = last_order.price * 0.5
-                    last_order.driver.amount_of_money += need_to_pay
-                    last_order.passenger.amount_of_money -= need_to_pay
-                    last_order.driver = None
-                    last_order.passenger.save()
-                    last_order.save()
+                    last_order.setStatusAndPayPercent(status = OrderStatus.COMPLETED, percent=50)
                 if last_order.status == OrderStatus.IN_PROGRESS and last_order.passenger == passenger:
-                    last_order.status = OrderStatus.COMPLETED
-                    need_to_pay = last_order.price * 0.8
-                    last_order.driver.amount_of_money += need_to_pay
-                    last_order.passenger.amount_of_money -= need_to_pay
-                    last_order.driver.save()
-                    last_order.passenger.save()
-                    last_order.save()
+                    last_order.setStatusAndPayPercent(status = OrderStatus.COMPLETED, percent=80)
             elif action == 'COMPLETE':
                 if last_order.status == OrderStatus.IN_PROGRESS and last_order.passenger == passenger:
-                    last_order.status = OrderStatus.COMPLETED
-                    need_to_pay = float("{:.2f}".format(last_order.price))
-                    last_order.driver.amount_of_money += need_to_pay
-                    last_order.passenger.amount_of_money -= need_to_pay
-                    last_order.driver.save()
-                    last_order.passenger.save()
-                    last_order.save()
+                    last_order.setStatusAndPayPercent(status = OrderStatus.COMPLETED, percent=100)
                     # TODO: Add redirect on screen to set driver's rate
+                    return HttpResponseRedirect(f"/passenger_order/{last_order.id}/")
         else:
             print(f"ERROR!!!\n{form.errors.as_text}")
     if last_order.status == OrderStatus.NEW_ORDER:
@@ -239,6 +218,7 @@ def passenger_add_money(request):
             passenger.amount_of_money += form.cleaned_data['amount']
             passenger.save()
             messages.success(request, 'Data was successfully submitted!')
+            income = passenger.amount_of_money # we changed amount_of_money so we need to change income value to render this page correctly
     else:
         form = AddMoneyForm()
         messages.error(request, 'There was a problem while submitting your data! Try again!')
