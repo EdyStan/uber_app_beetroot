@@ -51,7 +51,7 @@ def driver_executed_orders(request):
 def driver_income(request):
     usr: User=request.user
     drv = DriverUser.objects.get(user=usr)
-    income = drv.amount_of_money
+    income = f"{drv.amount_of_money:0.2f}"
     return render(request, 'main_app/driver_income.html', context={'income': income})
 
 

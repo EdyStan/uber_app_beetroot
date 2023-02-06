@@ -203,7 +203,7 @@ def passenger_rate(request):
 def passenger_income(request):
     usr: User = request.user
     passenger = PassengerUser.objects.get(user=usr)
-    income = passenger.amount_of_money
+    income = f"{passenger.amount_of_money:0.2f}"
     return render(request, 'main_app/passenger_income.html', context={'income': income})
 
 
@@ -211,14 +211,14 @@ def passenger_income(request):
 def passenger_add_money(request):
     usr: User = request.user
     passenger = PassengerUser.objects.get(user=usr)
-    income = passenger.amount_of_money
+    income = f"{passenger.amount_of_money:0.2f}"
     if request.method == 'POST':
         form = AddMoneyForm(request.POST)
         if form.is_valid():
             passenger.amount_of_money += form.cleaned_data['amount']
             passenger.save()
             messages.success(request, 'Data was successfully submitted!')
-            income = passenger.amount_of_money # we changed amount_of_money so we need to change income value to render this page correctly
+            income = f"{passenger.amount_of_money:0.2f}" # we changed amount_of_money so we need to change income value to render this page correctly
     else:
         form = AddMoneyForm()
         messages.error(request, 'There was a problem while submitting your data! Try again!')
