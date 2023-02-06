@@ -23,6 +23,6 @@ urlpatterns = [
     path('passenger_executed_orders/', passengers.passenger_executed_orders, name='passenger_executed_orders'),
     path('passenger_rate/', passengers.passenger_rate, name='passenger_rate'),
     path("password_change/", common.password_change, name="password_change"),
-    # google maps here
-    path('geocode/', order_details.geocode, name="geocode"),
+        # ...other urls
+    path('get/ajax/get/order/details', order_details.get_order_details, name = "get_order_details")
 ]

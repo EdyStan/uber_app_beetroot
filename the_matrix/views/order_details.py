@@ -1,18 +1,25 @@
-import googlemaps
-import json
-from django.conf import settings
-from django.shortcuts import render
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from ..models import User, Order, OrderStatus
 
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
-def geocode(request):
-    gmaps = googlemaps.Client(key= settings.GOOGLE_API_KEY)
-    result = json.dumps(gmaps.geocode(str('Stadionstraat 5, 4815 NC Breda')))
-    result2 = json.loads(result)
-    latitude = result2[0]['geometry']['location']['lat']
-    longitude = result2[0]['geometry']['location']['lng']
-    context = {
-        'result':result,
-        'latitude':latitude,
-        'longitude':longitude
-    }
-    return render(request, 'main_app/driver_order.html', context)
+@login_required
+def get_order_details(request):
+    # request should be ajax and method should be GET.
+    if is_ajax(request) and request.method == "GET":
+        # get the nick name from the client side.
+        order_id = request.GET.get("order_id", None)
+        order = Order.objects.get(pk=order_id)
+        usr: User = request.user
+
+        # check for the nick name in the database.
+        if order.passenger.user == usr or order.driver.user == usr or order.status == OrderStatus.UNASSIGNED:
+            # if nick_name found return not valid new friend
+            return JsonResponse({"order_status": order.status}, status = 200)
+        else:
+            # we can't show of other orders.
+            return JsonResponse({}, status = 400)
+
+    return JsonResponse({}, status = 400)

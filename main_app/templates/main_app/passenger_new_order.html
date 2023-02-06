@@ -78,6 +78,31 @@
     {% endif %}
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&callback=initMap"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script>
+        function load_order(){
+            // GET AJAX request
+            $.ajax({
+                type: 'GET',
+                url: "{% url 'get_order_details' %}",
+                data: {"order_id": {{ order.id }} },
+                success: function (response) {
+                    if(response["order_status"] != {{ order.status }}){
+                        document.location.reload();
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            })
+        }
+        load_order();
+        setInterval(function(){
+            load_order() // this will run after every 4 seconds
+        }, 4000);
+    </script>
 {% endblock %}
 
 {% block content %}
