@@ -51,9 +51,11 @@ def passenger_new_order(request):
         last_order = Order(passenger=passenger, status=OrderStatus.NEW_ORDER, price=6.0)
         last_order.save()
     if last_order.status == OrderStatus.NEW_ORDER:
+        start_init = f"({last_order.start_location_lat}, {last_order.start_location_lon})" if (last_order.start_location_lat and last_order.start_location_lon) else ""
+        end_init = f"({last_order.destination_lat}, {last_order.destination_lon})" if (last_order.destination_lat and last_order.destination_lon) else ""
         data = {
-            'start_location': f"({last_order.start_location_lat}, {last_order.start_location_lon})",
-            'end_location': f"({last_order.destination_lat}, {last_order.destination_lon})"}
+            'start_location': start_init,
+            'end_location': end_init}
         form = NewOrderForm(initial=data)
         context = {
             'order': last_order,

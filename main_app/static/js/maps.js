@@ -44,9 +44,14 @@ function initMap() {
     var bounds = new google.maps.LatLngBounds();
     console.log(myLatLng.lat, myLatLng.lng);
 
+    const map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 12,
+      center: myLatLng,
+    });  // there, we can specify the centering
+
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
+      navigator.geolocation.getCurrentPosition(
           (position) => {
             const pos = {
               lat: position.coords.latitude,
@@ -63,22 +68,17 @@ function initMap() {
               scale: 2,
               anchor: new google.maps.Point(0, 20),
             };
-            this.passengerSvgMarker = addPin(pos, map, config);
+            this.passengerSvgMarker = addPin(pos, map, config);            
           },
           () => {
             // handleLocationError(true, infoWindow, map.getCenter());
           }
-        );
-      } else {
+      );
+    } else {
         // Browser doesn't support Geolocation
         // handleLocationError(false, infoWindow, map.getCenter());
-      }
+    }
 
-
-    const map = new google.maps.Map(document.getElementById("map"), {
-      zoom: 12,
-      center: myLatLng,
-    });  // there, we can specify the centering
     console.log("ADD PINS");
 
     this.startSvgMarkerConfig = {
@@ -119,6 +119,15 @@ function initMap() {
         placeMarker(event.latLng, map);
       }
     });
+
+    var stm = document.getElementById(start_marker_id);
+    if (stm) {
+        stm.readOnly = true;
+    }
+    var enm = document.getElementById(end_marker_id);
+    if (enm) {
+        enm.readOnly = true;
+    }
 }
 
 function placeMarker(location, map) {

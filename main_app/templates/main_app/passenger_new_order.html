@@ -84,6 +84,7 @@
     <script>
         function load_order(){
             // GET AJAX request
+            {% if order.id %}
             $.ajax({
                 type: 'GET',
                 url: "{% url 'get_order_details' %}",
@@ -97,6 +98,7 @@
                     console.log(response)
                 }
             })
+            {% endif %}
         }
         load_order();
         setInterval(function(){
@@ -119,7 +121,7 @@
                                     {% csrf_token %}
                                     {{ form|crispy }}
                                     <div class="d-flex justify-content-center mt-3 login_container">
-                                        <input type="submit" class="btn login_btn" value="Submit">
+                                        <input type="submit" id="submit_new_order" class="btn login_btn" value="Submit"">
                                     </div>
                                 </form>
                             </div>

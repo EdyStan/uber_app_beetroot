@@ -25,6 +25,7 @@
     <script>
         function load_order(){
             // GET AJAX request
+            {% if order.id %}
             $.ajax({
                 type: 'GET',
                 url: "{% url 'get_order_details' %}",
@@ -39,6 +40,7 @@
                     console.log(response)
                 }
             })
+            {% endif %}
         }
         
         setInterval(function(){
